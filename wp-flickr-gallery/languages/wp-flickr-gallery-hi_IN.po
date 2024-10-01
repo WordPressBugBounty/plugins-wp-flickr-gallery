@@ -1,0 +1,323 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"POT-Creation-Date: 2018-10-06 16:30+0530\n"
+"PO-Revision-Date: 2018-10-06 16:31+0530\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: hi_IN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.5\n"
+"X-Poedit-Basepath: ../wp-flickr-gallery\n"
+"Plural-Forms: nplurals=2; plural=(n==0 || n==1);\n"
+"X-Poedit-KeywordsList: __;_e\n"
+"X-Poedit-SearchPath-0: .\n"
+
+#. translators: 1: The rating
+#: featured-plugins/featured-plugins.php:96
+#, php-format
+msgid "%s rating"
+msgstr "%s रेटिंग"
+
+#: featured-plugins/featured-plugins.php:111
+msgid "Get More Free WordPress Plugin From A WP Life"
+msgstr "ए ड़बल्युपी लाइफ से अधिक मुफ्त वर्डप्रेस प्लगइन प्राप्त करें"
+
+#. translators: 1: Plugin name and version.
+#: featured-plugins/featured-plugins.php:157
+msgid "More Details"
+msgstr "अधिक जानकारी"
+
+#. translators: 1: Plugin name and version.
+#: featured-plugins/featured-plugins.php:168
+msgid "Install Now"
+msgstr "अभी स्थापित करें"
+
+#. translators: 1: Plugin name and version
+#: featured-plugins/featured-plugins.php:175
+msgid "Update Now"
+msgstr "अभी अद्यतन करें"
+
+#: featured-plugins/featured-plugins.php:218
+msgid "By "
+msgstr "द्वारा"
+
+#: featured-plugins/featured-plugins.php:239
+msgid "Last Updated:"
+msgstr "आखरी अपडेट:"
+
+#: flickr-api-settings.php:21 flickr-gallery.php:90
+#: flickr-post-settings.php:85
+msgid "Flickr API Settings"
+msgstr "फ़्लिकर एपीआई सेटिंग्स"
+
+#: flickr-api-settings.php:23
+msgid "Flickr User ID"
+msgstr "फ़्लिकर उपयोगकर्ता आईडी"
+
+#: flickr-api-settings.php:25
+msgid "How To Get Your User ID?"
+msgstr "अपना यूजर आईडी कैसे प्राप्त करें"
+
+#: flickr-api-settings.php:27
+msgid "Flickr API Key"
+msgstr "फ़्लिकर एपीआई कुंजी"
+
+#: flickr-api-settings.php:29
+msgid "How To Get Your API Key?"
+msgstr "अपनी एपीआई कुंजी कैसे प्राप्त करें"
+
+#: flickr-gallery.php:31 flickr-gallery.php:105 flickr-gallery.php:106
+#: flickr-gallery.php:111 flickr-gallery.php:120
+msgid "Flickr Gallery"
+msgstr "फ़्लिकर गैलरी"
+
+#: flickr-gallery.php:91
+msgid "Docs"
+msgstr "दस्तावेज़"
+
+#: flickr-gallery.php:92
+msgid "Buy Premium Plugin"
+msgstr "प्रीमियम प्लगइन खरीदें"
+
+#: flickr-gallery.php:93
+msgid "Featured Plugin"
+msgstr "फीचर्ड प्लगइन"
+
+#: flickr-gallery.php:94
+msgid "Our Theme"
+msgstr "हमारी थीम"
+
+#: flickr-gallery.php:107
+msgid "Parent Item:"
+msgstr "अभिभावक आइटम:"
+
+#: flickr-gallery.php:108
+msgid "All Flickr Gallery"
+msgstr "सभी फ़्लिकर गैलरी"
+
+#: flickr-gallery.php:109 flickr-gallery.php:110
+msgid "Add Flickr Gallery"
+msgstr "फ़्लिकर गैलरी जोड़ें"
+
+#: flickr-gallery.php:112
+msgid "Edit Flickr Gallery"
+msgstr "फ़्लिकर गैलरी संपादित करें"
+
+#: flickr-gallery.php:113
+msgid "Update Flickr Gallery"
+msgstr "फ़्लिकर गैलरी अपडेट करें"
+
+#: flickr-gallery.php:114
+msgid "Search Flickr Gallery"
+msgstr "फ़्लिकर गैलरी खोजें"
+
+#: flickr-gallery.php:115
+msgid "Flickr Gallery Not found"
+msgstr "फ़्लिकर गैलरी नहीं मिली"
+
+#: flickr-gallery.php:116
+msgid "Flickr Gallery Not found in Trash"
+msgstr "फ्लिकर गैलरी ट्रैश में नहीं मिली"
+
+#: flickr-gallery.php:121
+msgid "Custom Post Type For Flickr Gallery"
+msgstr "फ़्लिकर गैलरी के लिए कस्टम पोस्ट प्रकार"
+
+#: flickr-gallery.php:148
+msgid "Flickr Gallery Shortcode"
+msgstr "फ़्लिकर गैलरी शोर्टकोड"
+
+#: flickr-gallery.php:149
+msgid "Flickr Settings"
+msgstr "फ़्लिकर सेटिंग्स"
+
+#: flickr-gallery.php:150
+msgid "Upgrade Flickr Gallery Pro"
+msgstr "फ़्लिकर गैलरी प्रो अपग्रेड करें"
+
+#: flickr-gallery.php:151
+msgid "Rate Our Plugin"
+msgstr "हमारे प्लगइन को रेट करें"
+
+#: flickr-gallery.php:180
+msgid ""
+"Copy & Embed shotcode into any Page/ Post / Text Widget to display your "
+"flickr gallery on your site."
+msgstr ""
+"अपनी साइट पर अपनी फ़्लिकर गैलरी प्रदर्शित करने के लिए किसी भी पेज / पोस्ट / टेक्स्ट विजेट "
+"में कॉपीकोड एम्बेड करें और एम्बेड करें।"
+
+#: flickr-post-settings.php:83
+msgid "Flickr Gallery Settings"
+msgstr "फ़्लिकर गैलरी सेटिंग्स"
+
+#: flickr-post-settings.php:85
+msgid "First set your Flickr User ID and API Key on"
+msgstr "पहले अपनी फ़्लिकर उपयोगकर्ता आईडी और एपीआई कुंजी सेट करें"
+
+#: flickr-post-settings.php:85
+msgid "Page."
+msgstr "पृष्ठ"
+
+#: flickr-post-settings.php:87
+msgid "Flickr Gallery Type"
+msgstr "फ़्लिकर गैलरी प्रकार"
+
+#: flickr-post-settings.php:91
+msgid "Photostream"
+msgstr "फोटो धारा"
+
+#: flickr-post-settings.php:93
+msgid "Album"
+msgstr "एल्बम"
+
+#: flickr-post-settings.php:98
+msgid "I. All Flickr Albums"
+msgstr "I. सभी फ़्लिकर एल्बम"
+
+#: flickr-post-settings.php:141
+msgid "Select an album gallery to display into gallery."
+msgstr "गैलरी में प्रदर्शित करने के लिए एक एल्बम गैलरी का चयन करें।"
+
+#: flickr-post-settings.php:146
+msgid "Gallery Title"
+msgstr "गैलरी शीर्षक"
+
+#: flickr-post-settings.php:150
+msgid "Show"
+msgstr "प्रदर्शन"
+
+#: flickr-post-settings.php:152
+msgid "Hide"
+msgstr "छिपाना"
+
+#: flickr-post-settings.php:154
+msgid "Show / Hide gallery post title."
+msgstr "गैलरी पोस्ट शीर्षक दिखाएँ / छुपाएं।"
+
+#: flickr-post-settings.php:157
+msgid "A. Gallery Title Color"
+msgstr "अ. गैलरी शीर्षक रंग"
+
+#: flickr-post-settings.php:160
+msgid "Select the color of the gallery post title."
+msgstr "गैलरी पोस्ट शीर्षक का रंग चुनें।"
+
+#: flickr-post-settings.php:162
+msgid "B. Gallery Title Font Size"
+msgstr "ब. गैलरी शीर्षक फ़ॉन्ट आकार"
+
+#: flickr-post-settings.php:168
+msgid "Set the gallery post title font size"
+msgstr "गैलरी पोस्ट शीर्षक फ़ॉन्ट आकार सेट करें"
+
+#: flickr-post-settings.php:170
+msgid "C. Gallery Title Text Alignment"
+msgstr "स. गैलरी शीर्षक पाठ संरेखण"
+
+#: flickr-post-settings.php:174
+msgid "Left"
+msgstr "बाएं"
+
+#: flickr-post-settings.php:176
+msgid "Center"
+msgstr "केंद्र"
+
+#: flickr-post-settings.php:178
+msgid "Right"
+msgstr "सही"
+
+#: flickr-post-settings.php:180
+msgid "Set alignment of gallery post title."
+msgstr "गैलरी पोस्ट शीर्षक के संरेखण सेट करें।"
+
+#: flickr-post-settings.php:183
+msgid "Colums On Desktops"
+msgstr "डेस्कटॉप पर कॉलम"
+
+#: flickr-post-settings.php:186
+msgid "3 Column Layout"
+msgstr "3 कॉलम लेआउट"
+
+#: flickr-post-settings.php:187
+msgid "4 Column Layout"
+msgstr "4 कॉलम लेआउट"
+
+#: flickr-post-settings.php:189
+msgid "Sets the columns on the Desktops"
+msgstr "डेस्कटॉप पर कॉलम सेट करता है"
+
+#: flickr-post-settings.php:191
+msgid "Image Size"
+msgstr "छवि का आकार"
+
+#: flickr-post-settings.php:192
+msgid "A. Thumbnail Image Size"
+msgstr "अ. थंबनेल छवि का आकार"
+
+#: flickr-post-settings.php:195
+msgid "Square - 75x75"
+msgstr "वर्ग - 75x75"
+
+#: flickr-post-settings.php:196
+msgid "Large Square - 150x150"
+msgstr "बड़ा वर्ग - 150x150"
+
+#: flickr-post-settings.php:197
+msgid "Thumbnail - 100x75"
+msgstr "थंबनेल - 100x75"
+
+#: flickr-post-settings.php:198
+msgid "Small - 240x180"
+msgstr "छोटा - 240x180"
+
+#: flickr-post-settings.php:200
+msgid "Set thumbnail image size for gallery output"
+msgstr "गैलरी आउटपुट के लिए थंबनेल छवि आकार सेट करें"
+
+#: flickr-post-settings.php:202
+msgid "B. Lightbox Preview Image Size"
+msgstr "ब. लाइटबॉक्स पूर्वावलोकन छवि का आकार"
+
+#: flickr-post-settings.php:205
+msgid "Medium - 500x375"
+msgstr "मध्यम - 500x375"
+
+#: flickr-post-settings.php:206
+msgid "Large - 1024x768"
+msgstr "बड़ा - 1024x768"
+
+#: flickr-post-settings.php:208
+msgid "Set lightbox image preview size when click on thumbnail"
+msgstr "थंबनेल पर क्लिक करते समय लाइटबॉक्स छवि पूर्वावलोकन आकार सेट करें"
+
+#: flickr-post-settings.php:212
+msgid "Light Box Preview"
+msgstr "ब. लाइटबॉक्स पूर्वावलोकन छवि का आकार"
+
+#: flickr-post-settings.php:216
+msgid "Enable"
+msgstr "सक्षम करें"
+
+#: flickr-post-settings.php:218
+msgid "Disable"
+msgstr "अक्षम"
+
+#: flickr-post-settings.php:220
+msgid ""
+"Enable / Disable light gallery image light box for larger image preview."
+msgstr "लाइट गैलरी छवि लाइट बॉक्स दिखाएँ / छुपाएं।"
+
+#: flickr-post-settings.php:224
+msgid "Custom CSS"
+msgstr "कस्टम सीएसएस"
+
+#: flickr-post-settings.php:227
+msgid "Apply own custom CSS code to this shortcode"
+msgstr "इस शोर्ट पर अपने कस्टम सीएसएस कोड लागू करें"
+
+#~ msgid "Light Image Gallery"
+#~ msgstr "लाइट इमेज गैलरी"
