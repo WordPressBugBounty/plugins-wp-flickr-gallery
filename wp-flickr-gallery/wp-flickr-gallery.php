@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: Album Photostream Profile For Flickr
 Plugin URI: https://awplife.com/
 Description: A Newly Amazing Different Most Powerful Responsive Easy To Use Flickr Plugin For WordPress
-Version: 1.4.3
+Version: 1.4.4
 Author: A WP Life
 Author URI: https://awplife.com/
 Text Domain: wp-flickr-gallery
