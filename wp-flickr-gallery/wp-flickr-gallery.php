@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: Album Photostream Profile For Flickr
 Plugin URI: https://awplife.com/
 Description: A Newly Amazing Different Most Powerful Responsive Easy To Use Flickr Plugin For WordPress
-Version: 1.4.5
+Version: 1.4.6
 Author: A WP Life
 Author URI: https://awplife.com/
 Text Domain: wp-flickr-gallery
@@ -78,7 +78,7 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 			// add pfg cpt shortcode column data - manage_{$post_type}_posts_custom_column
 			add_action( 'manage_flickr_gallery_posts_custom_column', array( &$this, 'custom_flickr_gallery_shodrcode_data' ), 10, 2 );
 
-						add_action( 'wp_ajax_api_settings_action', array( &$this, 'save_fg_api_setting' ) );
+			add_action( 'wp_ajax_api_settings_action', array( &$this, 'save_fg_api_setting' ) );
 
 			add_action( 'wp_enqueue_scripts', array( &$this, 'flickr_enqueue_scripts_in_header' ) );
 

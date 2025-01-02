@@ -3,8 +3,8 @@ Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkh
 Donate link: https://paypal.me/awplife
 Tags: flickr photo gallery, flickr widget, album gallery, flickr profile, feed
 Requires at least: 4.0
-Tested up to: 6.6.2
-Stable tag: 1.4.5
+Tested up to: 6.7.1
+Stable tag: 1.4.6
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -103,11 +103,17 @@ https://wordpress.org/support/plugin/wp-flickr-gallery/
 
 == Changelog ==
 
+= 1.4.6 =
+
+* Testing plugin for wordpress 6.7.1
+* Bug Fix: Fixed.
+
 = 1.4.5 =
 
 * Testing plugin for wordpress 6.6.2
 * Bug Fix: Fixed.
 * Additional changes: None.
+
 
 = 1.4.4 =
 
