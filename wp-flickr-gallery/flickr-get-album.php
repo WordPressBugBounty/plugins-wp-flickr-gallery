@@ -76,7 +76,7 @@ $res     = $rsp_obj['photoset']['photo'];
 			// light gallery
 			if ( $image_type == 'image' && $thumbnail_url && $lightboxl_url ) {
 				?>
-				<a href="<?php echo esc_url( $lightboxl_url ); ?>" class="img-responsive text-center single-album-<?php echo esc_attr( $flickr_gallery_id ); ?> <?php echo esc_attr( $col_desktops ); ?>" data-sub-html="<h4 class=fg-titile-<?php echo esc_attr( $flickr_gallery_id ); ?>><?php echo esc_html( $album_title_fetch ); ?></h4>" data-rel="lightcase-<?php echo esc_attr( $flickr_gallery_id ); ?>:myCollection:slideshow">
+				<a href="<?php echo esc_url( $lightboxl_url ); ?>" class="img-responsive text-center single-album-<?php echo esc_attr( $flickr_gallery_id ); ?> <?php echo esc_attr( $col_desktops ); ?>" data-sub-html="<?php echo esc_html( $album_title_fetch ); ?>" data-rel="lightcase-<?php echo esc_attr( $flickr_gallery_id ); ?>:myCollection:slideshow">
 					<img class="img-responsive img-thumbnail photo loading" src="<?php echo esc_url( $thumbnail_url ); ?>" alt="<?php echo esc_html( $album_title_fetch ); ?>" width="auto" height="auto">
 				</a> 
 				<?php
