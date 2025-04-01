@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: Album Photostream Profile For Flickr
 Plugin URI: https://awplife.com/
 Description: A Newly Amazing Different Most Powerful Responsive Easy To Use Flickr Plugin For WordPress
-Version: 1.4.7
+Version: 1.4.8
 Author: A WP Life
 Author URI: https://awplife.com/
 Text Domain: wp-flickr-gallery
@@ -148,7 +148,6 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		/* Add Gallery menu*/
 		public function fg_gallery_menu() {
 			$fg_api_setting_menu   = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Flickr API Settings', 'wp-flickr-gallery' ), __( 'Flickr API Settings', 'wp-flickr-gallery' ), 'administrator', 'fg-api-settings', array( $this, '_fg_api_settings' ) );
-			$fg_help_menu          = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Docs', 'wp-flickr-gallery' ), __( 'Docs', 'wp-flickr-gallery' ), 'administrator', 'ag-doc-page', array( $this, '_fg_doc_page' ) );
 			$fg_help_menu_featured = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Featured Plugin', 'wp-flickr-gallery' ), __( 'Featured Plugin', 'wp-flickr-gallery' ), 'administrator', 'ag-featured-page', array( $this, '_fg_featured_page' ) );
 			$theme_menu            = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Our Theme', 'wp-flickr-gallery' ), __( 'Our Theme', 'wp-flickr-gallery' ), 'administrator', 'sr-theme-page', array( $this, '_fg_theme_page' ) );
 		}
@@ -319,10 +318,6 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		// displaying flickr api settings page
 		public function _fg_api_settings() {
 			require_once 'flickr-api-settings.php';
-		}
-
-		public function _fg_doc_page() {
-			require_once 'flickr-docs.php';
 		}
 
 		public function _fg_featured_page() {
