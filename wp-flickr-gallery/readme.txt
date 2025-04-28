@@ -3,8 +3,8 @@ Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkh
 Donate link: https://paypal.me/awplife
 Tags: flickr photo gallery, flickr widget, album gallery, flickr profile, feed
 Requires at least: 4.0
-Tested up to: 6.7.2
-Stable tag: 1.4.8
+Tested up to: 6.8
+Stable tag: 1.4.9
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -38,6 +38,10 @@ https://www.youtube.com/watch?v=6X-u_9l9B9k
 * Responsive Profile Header
 * Photostream, Albums and Profiles
 * Photostream Gallery Shortcode
+* Support for fetching private photos
+* Pagination Settings
+* Videos from Flickr photostream
+* Justified gallery layout
 * Album Gallery Shortcode
 * Photo Limit Max 500
 * Image Sizing Settings
@@ -103,9 +107,13 @@ https://wordpress.org/support/plugin/wp-flickr-gallery/
 
 == Changelog ==
 
+= 1.4.9 =
+* Testing plugin for wordpress 6.8
+* Bug Fix: Fixed.
+
 = 1.4.8 =
 * Testing plugin for wordpress 6.7.2
-* Bug Fix: Fixed.
+* Bug Fix: Fixed
 
 = 1.4.7 =
 * twenty twenty-five conflict issue fixed
