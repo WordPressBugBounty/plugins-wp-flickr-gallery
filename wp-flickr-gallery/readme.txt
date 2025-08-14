@@ -3,8 +3,8 @@ Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkh
 Donate link: https://paypal.me/awplife
 Tags: flickr photo gallery, flickr widget, album gallery, flickr profile, feed
 Requires at least: 4.0
-Tested up to: 6.8
-Stable tag: 1.4.9
+Tested up to: 6.8.2
+Stable tag: 1.5.0
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -21,6 +21,9 @@ The best plugin for any site like gallery WordPress plugin has many configuratio
 Use built-in Widget in theme sidebar area, paste the shortcode in the text widget.
 
 Just put your [User ID](https://awplife.com/how-to-get-your-user-id-of-flickr/) and [API Key](https://awplife.com/how-to-get-your-api-key-of-flickr/) into API Setting page and start creating galleries.
+
+**Note:** As per Flickr's guidelines, API key creation is currently disabled for free accounts. API key creation is only available to all Flickr PRO subscribers.
+
 
 The plugin very easy in use for new and old users of WordPress.
 
@@ -106,6 +109,10 @@ Please post your question on plugin support forum
 https://wordpress.org/support/plugin/wp-flickr-gallery/
 
 == Changelog ==
+
+= 1.5.0 =
+* Testing plugin for wordpress 6.8.2
+* Bug Fix: Fixed.
 
 = 1.4.9 =
 * Testing plugin for wordpress 6.8

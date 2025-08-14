@@ -20,6 +20,7 @@ $fg_ajax_nonce = wp_create_nonce( 'fg_api_setting_nonce_key' );
 ?>
 <div class="box">
 	<h2><?php esc_html_e( 'Flickr API Settings', 'wp-flickr-gallery' ); ?></h2>
+	<p>Note: As per Flickr’s guidelines, API key creation is currently disabled for free accounts. API key creation is only available to all <a href="https://www.flickr.com/services/apps/create/apply/"target="_new"><?php esc_html_e( 'Flickr', 'wp-flickr-gallery' ); ?></a> PRO subscribers.</p>
 	<form id="flickr-setting-form">
 		<label for="key"><?php esc_html_e( 'Flickr User ID', 'wp-flickr-gallery' ); ?></label><br><br>
 		<?php
