@@ -4,11 +4,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /*
-@package Flickr Photostream And Album Gallery Premium
+@package WP Flickr Gallery
 Plugin Name: Album Photostream Profile For Flickr
 Plugin URI: https://awplife.com/
 Description: A Newly Amazing Different Most Powerful Responsive Easy To Use Flickr Plugin For WordPress
-Version: 1.5.2
+Version: 1.6.0
 Author: A WP Life
 Author URI: https://awplife.com/
 Text Domain: wp-flickr-gallery
@@ -27,26 +27,26 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		protected function _constants() {
 
 			// Plugin Text Domain
-			define( 'FGP_TXTDM', 'wp-flickr-gallery' );
+			define( 'AWL_FG_TEXT_DOMAIN', 'wp-flickr-gallery' );
 
 			// Plugin Name
-			define( 'FG_PLUGIN_NAME', __( 'Flickr Gallery', FGP_TXTDM ) );
+			define( 'AWL_FG_NAME', 'Flickr Gallery' );
 
 			// Plugin Slug
-			define( 'FG_PLUGIN_SLUG', 'flickr_gallery' );
+			define( 'AWL_FG_SLUG', 'flickr_gallery' );
 
 			// Plugin Directory Path
-			define( 'FG_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+			define( 'AWL_FG_DIR', plugin_dir_path( __FILE__ ) );
 
 			// Plugin Driectory URL
-			define( 'FG_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+			define( 'AWL_FG_URL', plugin_dir_url( __FILE__ ) );
 
 			/**
 			 * Create a key for the .htaccess secure download link.
 			 *
 			 * @uses    NONCE_KEY     Defined in the WP root config.php
 			 */
-			define( 'FGP_SECURE_KEY', md5( NONCE_KEY ) );
+			define( 'AWL_FG_SECURE_KEY', md5( NONCE_KEY ) );
 
 		} // end of constructor function
 
@@ -56,7 +56,7 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		protected function _hooks() {
 
 			// Load Text Domain
-			add_action( 'plugins_loaded', array( $this, '_load_textdomain' ) );
+			add_action( 'init', array( $this, '_load_textdomain' ) );
 
 			// add gallery menu item, change menu filter for multisite
 			add_action( 'admin_menu', array( $this, 'fg_gallery_menu' ), 101 );
@@ -81,19 +81,70 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 			add_action( 'wp_ajax_api_settings_action', array( &$this, 'save_fg_api_setting' ) );
 
 			add_action( 'wp_enqueue_scripts', array( &$this, 'flickr_enqueue_scripts_in_header' ) );
+			add_action( 'admin_enqueue_scripts', array( &$this, 'fg_admin_enqueue_scripts' ) );
 
 		} // end of hook function
 
+		public function fg_admin_enqueue_scripts( $hook ) {
+			global $post;
+
+			// Common Admin Scripts
+			wp_enqueue_script( 'awl-fg-admin-common', AWL_FG_URL . 'js/fg-admin-common.js', array( 'jquery' ), '1.0', true );
+
+			// Settings Page Assets
+			if ( 'flickr_gallery_page_fg-api-settings' === $hook ) {
+				wp_enqueue_style( 'awl-fg-admin-css', AWL_FG_URL . 'css/fg-admin.css' );
+				wp_enqueue_style( 'awl-fg-font-awesome', AWL_FG_URL . 'css/font-awesome.min.css' );
+				wp_enqueue_script( 'awl-fg-api-settings-js', AWL_FG_URL . 'js/fg-api-settings.js', array( 'jquery' ), '1.0', true );
+				wp_localize_script( 'awl-fg-api-settings-js', 'fg_api_vars', array(
+					'nonce' => wp_create_nonce( 'fg_api_setting_nonce_key' ),
+				) );
+			}
+
+			// Our Plugins & Themes Assets
+			if ( 'flickr_gallery_page_awl-fg-our-plugins' === $hook || 'flickr_gallery_page_awl-fg-our-themes' === $hook ) {
+				wp_enqueue_style( 'awl-fg-our-plugins-style', AWL_FG_URL . 'css/our-plugins-style.css' );
+			}
+
+			// Post Editor Assets
+			if ( ( 'post.php' === $hook || 'post-new.php' === $hook ) && isset( $post->post_type ) && 'flickr_gallery' === $post->post_type ) {
+				wp_enqueue_media();
+				wp_enqueue_style( 'awl-fg-admin-css', AWL_FG_URL . 'css/fg-admin.css' );
+				wp_enqueue_style( 'awl-fg-setting-bootstrap-css', AWL_FG_URL . 'css/setting-bootstrap.css' );
+				wp_enqueue_style( 'awl-fg-toogle-button-css', AWL_FG_URL . 'css/toogle-button.css' );
+				wp_enqueue_style( 'awl-fg-styles-css', AWL_FG_URL . 'css/styles.css' );
+				wp_enqueue_style( 'awl-fg-font-awesome', AWL_FG_URL . 'css/font-awesome.min.css' );
+				wp_enqueue_style( 'awl-fg-lightcase-css', AWL_FG_URL . 'css/lightcase.css' );
+				
+				wp_enqueue_script( 'awl-fg-bootstrap-js', AWL_FG_URL . 'js/bootstrap.js', array( 'jquery' ), '', true );
+				wp_enqueue_script( 'awl-fg-lightcase-js', AWL_FG_URL . 'js/lightcase.js', array( 'jquery' ), '', true );
+				wp_enqueue_script( 'awl-fg-post-settings-js', AWL_FG_URL . 'js/fg-post-settings.js', array( 'jquery' ), '1.0', true );
+			}
+		}
+
 		public function flickr_enqueue_scripts_in_header() {
 			wp_enqueue_script( 'jquery' );
+			wp_register_script( 'awl-fg-isotope-js', AWL_FG_URL . 'js/isotope.pkgd.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'awl-fg-imagesloaded-js', AWL_FG_URL . 'js/imagesloaded.pkgd.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'awl-fg-lightcase-js', AWL_FG_URL . 'js/lightcase.js', array( 'jquery' ), '1.0', true );
+			wp_register_script( 'awl-fg-frontend-js', AWL_FG_URL . 'js/fg-frontend.js', array( 'jquery', 'awl-fg-isotope-js', 'awl-fg-imagesloaded-js' ), '1.0', true );
+
+			wp_register_style( 'awl-fg-bootstrap-css', AWL_FG_URL . 'css/bootstrap.css' );
+			wp_register_style( 'awl-fg-lightcase-css', AWL_FG_URL . 'css/lightcase.css' );
+			wp_register_style( 'awl-fg-shortcode-css', AWL_FG_URL . 'css/fg-shortcode.css' );
+			wp_register_style( 'awl-fg-frontend-css', AWL_FG_URL . 'css/fg-frontend.css' );
 		}
 
 		// saving Flickr gallery api setting
 		public function save_fg_api_setting() {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+
 			if ( check_ajax_referer( 'fg_api_setting_nonce_key', 'fg_api_security' ) ) {
 
-				$flickr_user_id = sanitize_text_field( $_POST['flickr_user_id'] );
-				$flickr_api_key = sanitize_text_field( $_POST['flickr_api_key'] );
+				$flickr_user_id = isset( $_POST['flickr_user_id'] ) ? sanitize_text_field( $_POST['flickr_user_id'] ) : '';
+				$flickr_api_key = isset( $_POST['flickr_api_key'] ) ? sanitize_text_field( $_POST['flickr_api_key'] ) : '';
 
 				$flickr_meta_api = array(
 					'flickr_user_id' => $flickr_user_id,
@@ -106,12 +157,10 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		// Flickr gallery cpt shortcode column before date columns
 		public function set_flickr_gallery_shortcode_column_name( $defaults ) {
 			$new       = array();
-			$shortcode = $columns['flickr_gallery_shortcode'];  // save the tags column
-			unset( $defaults['tags'] );   // remove it from the columns list
-
+			
 			foreach ( $defaults as $key => $value ) {
 				if ( $key == 'date' ) {  // when we find the date column
-					$new['flickr_gallery_shortcode'] = __( 'Shortcode', 'wp-flickr-gallery' );  // put the tags column before it
+					$new['flickr_gallery_shortcode'] = __( 'Shortcode', 'wp-flickr-gallery' );  // put the shortcode column before it
 				}
 				$new[ $key ] = $value;
 			}
@@ -122,21 +171,9 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		public function custom_flickr_gallery_shodrcode_data( $column, $post_id ) {
 			switch ( $column ) {
 				case 'flickr_gallery_shortcode':
-					echo "<input type='text' class='button button-primary' id='flickr-shortcode-" . esc_attr( $post_id ) . "' value='[FGAL id=" . esc_attr( $post_id ) . "]' style='font-weight:bold; background-color:#32373C; color:#FFFFFF; text-align:center;' />";
-					echo "<input type='button' class='button button-primary' onclick='return FLICKRCopyShortcode" . esc_attr( $post_id ) . "();' readonly value='Copy' style='margin-left:4px;' />";
-					echo "<span id='copy-msg-" . esc_attr( $post_id ) . "' class='button button-primary' style='display:none; background-color:#32CD32; color:#FFFFFF; margin-left:4px; border-radius: 4px;'>copied</span>";
-					echo '<script>
-						function FLICKRCopyShortcode' . esc_attr( $post_id ) . "() {
-							var copyText = document.getElementById('flickr-shortcode-" . esc_attr( $post_id ) . "');
-							copyText.select();
-							document.execCommand('copy');
-							
-							//fade in and out copied message
-							jQuery('#copy-msg-" . esc_attr( $post_id ) . "').fadeIn('1000', 'linear');
-							jQuery('#copy-msg-" . esc_attr( $post_id ) . "').fadeOut(2500,'swing');
-						}
-						</script>
-					";
+					echo "<input type='text' class='button button-primary fg-shortcode-input' id='flickr-shortcode-" . esc_attr( $post_id ) . "' value='[FGAL id=" . esc_attr( $post_id ) . "]' readonly />";
+					echo "<input type='button' class='button button-primary' onclick='return FLICKRCopyShortcode(" . esc_attr( $post_id ) . ");' value='Copy' style='margin-left:4px;' />";
+					echo "<span id='copy-msg-" . esc_attr( $post_id ) . "' class='button button-primary fg-copied-badge' style='display:none;'>copied</span>";
 					break;
 			}
 		}
@@ -147,9 +184,9 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 
 		/* Add Gallery menu*/
 		public function fg_gallery_menu() {
-			$fg_api_setting_menu   = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Flickr API Settings', 'wp-flickr-gallery' ), __( 'Flickr API Settings', 'wp-flickr-gallery' ), 'administrator', 'fg-api-settings', array( $this, '_fg_api_settings' ) );
-			$fg_help_menu_featured = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Featured Plugin', 'wp-flickr-gallery' ), __( 'Featured Plugin', 'wp-flickr-gallery' ), 'administrator', 'ag-featured-page', array( $this, '_fg_featured_page' ) );
-			$theme_menu            = add_submenu_page( 'edit.php?post_type=' . FG_PLUGIN_SLUG, __( 'Our Theme', 'wp-flickr-gallery' ), __( 'Our Theme', 'wp-flickr-gallery' ), 'administrator', 'sr-theme-page', array( $this, '_fg_theme_page' ) );
+			add_submenu_page( 'edit.php?post_type=' . AWL_FG_SLUG, __( 'Flickr API Settings', 'wp-flickr-gallery' ), __( 'Flickr API Settings', 'wp-flickr-gallery' ), 'administrator', 'fg-api-settings', array( $this, '_fg_api_settings' ) );
+			add_submenu_page( 'edit.php?post_type=' . AWL_FG_SLUG, __( 'Our Plugins', 'wp-flickr-gallery' ), __( 'Our Plugins', 'wp-flickr-gallery' ), 'administrator', 'awl-fg-our-plugins', array( $this, '_fg_our_plugins' ) );
+			add_submenu_page( 'edit.php?post_type=' . AWL_FG_SLUG, __( 'Our Themes', 'wp-flickr-gallery' ), __( 'Our Themes', 'wp-flickr-gallery' ), 'administrator', 'awl-fg-our-themes', array( $this, '_fg_our_themes' ) );
 		}
 
 		/**
@@ -210,16 +247,16 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		}
 		// meta upgrade pro
 		public function fg_upgrade_pro() { ?>
-			<img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) . 'img/featured-Image.png' ); ?>" width="250" height="280">
-			<a href="https://awplife.com/demo/flickr-gallery-premium/" target="_new" class="button button-primary button-large" style="background: #496481; text-shadow: none; margin-top:10px; font-size:12px"><span class="dashicons dashicons-search" style="line-height:1.4;" ></span> Live Demo</a>
-			<a href="https://awplife.com/account/signup/flickr-gallery-premium/" target="_new" class="button button-primary button-large" style="background: #496481; text-shadow: none; margin-top:10px; font-size:12px"><span class="dashicons dashicons-unlock" style="line-height:1.4;" ></span> Upgrade Pro</a>
+			<img src="<?php echo esc_url( AWL_FG_URL . 'img/featured-Image.png' ); ?>" width="250" height="280">
+			<a href="https://awplife.com/demo/flickr-gallery-premium/" target="_new" class="button button-primary button-large fg-meta-btn"><?php esc_html_e( 'Live Demo', 'wp-flickr-gallery' ); ?></a>
+			<a href="https://awplife.com/account/signup/flickr-gallery-premium/" target="_new" class="button button-primary button-large fg-meta-btn"><?php esc_html_e( 'Upgrade Pro', 'wp-flickr-gallery' ); ?></a>
 			<?php
 		}
 		// meta rate us
 		public function fg_rate_plugin() {
 			?>
 		<div style="text-align:center">
-			<p>If you like our plugin then please <b>Rate us</b> on WordPress</p>
+			<p><?php esc_html_e( 'If you like our plugin then please', 'wp-flickr-gallery' ); ?> <b><?php esc_html_e( 'Rate us', 'wp-flickr-gallery' ); ?></b> <?php esc_html_e( 'on WordPress', 'wp-flickr-gallery' ); ?></p>
 		</div>
 		<div style="text-align:center">
 			<span class="dashicons dashicons-star-filled"></span>
@@ -230,7 +267,7 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 		</div>
 		<br>
 		<div style="text-align:center">
-			<a href="https://wordpress.org/support/plugin/wp-flickr-gallery/reviews/?filter=5" target="_new" class="button button-primary button-large" style="background: #496481; text-shadow: none;"><span class="dashicons dashicons-heart" style="line-height:1.4;" ></span> Please Rate Us</a>
+			<a href="https://wordpress.org/support/plugin/wp-flickr-gallery/reviews/?filter=5" target="_new" class="button button-primary button-large fg-meta-btn"><?php esc_html_e( 'Please Rate Us', 'wp-flickr-gallery' ); ?></a>
 		</div>	
 			<?php
 		}
@@ -240,78 +277,55 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 			<p class="input-text-wrap">
 				<p><?php esc_html_e( 'Copy & Embed shotcode into any Page/ Post / Text Widget to display your flickr gallery on your site.', 'wp-flickr-gallery' ); ?><br></p>
 				<input type="text" name="FGALCopyShortcode" id="FGALCopyShortcode" value="<?php echo '[FGAL id=' . esc_attr( $post->ID ) . ']'; ?>" readonly style="height: 60px; text-align: center; width:100%;  font-size: 24px; border: 2px dashed;">
-			<p id="fgal-copy-code"><?php esc_html_e('Shortcode copied to clipboard!', 'wp-flickr-gallery' ); ?></p>
+			<p id="fgal-copy-code" style="display:none;"><?php esc_html_e('Shortcode copied to clipboard!', 'wp-flickr-gallery' ); ?></p>
 				<p style="margin-top: 10px"><?php esc_html_e('Copy & Embed shotcode into any Page/ Post / Text Widget to display gallery.', 'wp-flickr-gallery'); ?></p>
 			</p>
 			<span onclick="copyToClipboard('#FGALCopyShortcode')" class="igm-copy dashicons dashicons-clipboard"></span>
-			<style>
-				.igm-copy {
-					position: absolute;
-					top: 79px;
-					right: 24px;
-					font-size: 26px;
-					cursor: pointer;
-				}
-			</style>
-			<script>
-				jQuery( "#fgal-copy-code" ).hide();
-				function copyToClipboard(element) {
-				  var $temp = jQuery("<input>");
-				  jQuery("body").append($temp);
-				  $temp.val(jQuery(element).val()).select();
-				  document.execCommand("copy");
-				  $temp.remove();
-				  jQuery( "#FGALCopyShortcode" ).select();
-				  jQuery( "#fgal-copy-code" ).fadeIn();
-				}
-			</script>
 			<?php
 		}
 		// displaying post settings
 		public function _fg_post_settings( $post ) {
-			wp_enqueue_script( 'media-upload' );
-			wp_enqueue_style( 'awl-fg-bootstrap-css', plugin_dir_url( __FILE__ ) . 'css/bootstrap.css' );
-			wp_enqueue_media();
-			wp_enqueue_style( 'awl-fg-lightcase-css', plugin_dir_url( __FILE__ ) . 'css/lightcase.css' );
-			wp_enqueue_script( 'awl-fg-lightcase-js', plugin_dir_url( __FILE__ ) . 'js/lightcase.js' );
 			require_once 'flickr-post-settings.php';
 		}
 
 		public function _fg_save_post_settings( $post_id ) {
-			if ( isset( $_POST['fg_save_nonce'] ) ) {
+			if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+				return;
+			}
 
-				$flickr_gallery_type       = sanitize_text_field( $_POST['flickr_gallery_type'] );
-				$flickr_album_id           = sanitize_text_field( $_POST['flickr_album_id'] );
-				$fg_gallery_title          = sanitize_text_field( $_POST['fg_gallery_title'] );
-				$fg_gallery_titlecolor     = sanitize_hex_color( $_POST['fg_gallery_titlecolor'] );
-				$fg_gallery_titlesize      = sanitize_text_field( $_POST['fg_gallery_titlesize'] );
-				$fg_gallery_titlealighment = sanitize_text_field( $_POST['fg_gallery_titlealighment'] );
-				$col_desktops              = sanitize_text_field( $_POST['col_desktops'] );
-				$thumb_img_size            = sanitize_text_field( $_POST['thumb_img_size'] );
-				$lightbox_img_size         = sanitize_text_field( $_POST['lightbox_img_size'] );
-				$apply_light_box           = sanitize_text_field( $_POST['apply_light_box'] );
+			if ( ! current_user_can( 'edit_post', $post_id ) ) {
+				return;
+			}
 
-				if ( ! isset( $_POST['fg_save_nonce'] ) || ! wp_verify_nonce( $_POST['fg_save_nonce'], 'fg_save_settings' ) ) {
-					print 'Sorry, your nonce did not verify.';
-					exit;
-				} else {
-					$flickermeta_settings = array(
-						'flickr_gallery_type'       => $flickr_gallery_type,
-						'flickr_album_id'           => $flickr_album_id,
-						'fg_gallery_title'          => $fg_gallery_title,
-						'fg_gallery_titlecolor'     => $fg_gallery_titlecolor,
-						'fg_gallery_titlesize'      => $fg_gallery_titlesize,
-						'fg_gallery_titlealighment' => $fg_gallery_titlealighment,
-						'col_desktops'              => $col_desktops,
-						'thumb_img_size'            => $thumb_img_size,
-						'lightbox_img_size'         => $lightbox_img_size,
-						'apply_light_box'           => $apply_light_box,
+			if ( isset( $_POST['fg_save_nonce'] ) && wp_verify_nonce( $_POST['fg_save_nonce'], 'fg_save_settings' ) ) {
 
-					);
+				$flickr_gallery_type       = isset( $_POST['flickr_gallery_type'] ) ? sanitize_text_field( $_POST['flickr_gallery_type'] ) : 'photostream';
+				$flickr_album_id           = isset( $_POST['flickr_album_id'] ) ? sanitize_text_field( $_POST['flickr_album_id'] ) : '';
+				$fg_gallery_title          = isset( $_POST['fg_gallery_title'] ) ? sanitize_text_field( $_POST['fg_gallery_title'] ) : '';
+				$fg_gallery_titlecolor     = isset( $_POST['fg_gallery_titlecolor'] ) ? sanitize_hex_color( $_POST['fg_gallery_titlecolor'] ) : '#000000';
+				$fg_gallery_titlesize      = isset( $_POST['fg_gallery_titlesize'] ) ? sanitize_text_field( $_POST['fg_gallery_titlesize'] ) : '20';
+				$fg_gallery_titlealighment = isset( $_POST['fg_gallery_titlealighment'] ) ? sanitize_text_field( $_POST['fg_gallery_titlealighment'] ) : 'center';
+				$col_desktops              = isset( $_POST['col_desktops'] ) ? sanitize_text_field( $_POST['col_desktops'] ) : 'col-md-3';
+				$thumb_img_size            = isset( $_POST['thumb_img_size'] ) ? sanitize_text_field( $_POST['thumb_img_size'] ) : 'q';
+				$lightbox_img_size         = isset( $_POST['lightbox_img_size'] ) ? sanitize_text_field( $_POST['lightbox_img_size'] ) : 'b';
+				$apply_light_box           = isset( $_POST['apply_light_box'] ) ? sanitize_text_field( $_POST['apply_light_box'] ) : 'yes';
 
-					$awl_fg_post_settings = 'awl_fg_post_settings_' . $post_id;
-					update_post_meta( $post_id, $awl_fg_post_settings, $flickermeta_settings );
-				}
+				$flickermeta_settings = array(
+					'flickr_gallery_type'       => $flickr_gallery_type,
+					'flickr_album_id'           => $flickr_album_id,
+					'fg_gallery_title'          => $fg_gallery_title,
+					'fg_gallery_titlecolor'     => $fg_gallery_titlecolor,
+					'fg_gallery_titlesize'      => $fg_gallery_titlesize,
+					'fg_gallery_titlealighment' => $fg_gallery_titlealighment,
+					'col_desktops'              => $col_desktops,
+					'thumb_img_size'            => $thumb_img_size,
+					'lightbox_img_size'         => $lightbox_img_size,
+					'apply_light_box'           => $apply_light_box,
+
+				);
+
+				$awl_fg_post_settings = 'awl_fg_post_settings_' . $post_id;
+				update_post_meta( $post_id, $awl_fg_post_settings, $flickermeta_settings );
 			}
 		}//end _fg_save_post_settings()
 
@@ -320,58 +334,18 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 			require_once 'flickr-api-settings.php';
 		}
 
-		public function _fg_featured_page() {
-			require_once 'featured-plugins/featured-plugins.php';
+		// displaying our plugins page
+		public function _fg_our_plugins() {
+			require_once 'our-plugins.php';
 		}
 
-		// theme page
-		public function _fg_theme_page() {
-			require_once 'our-theme/awp-theme.php';
+		// displaying our themes page
+		public function _fg_our_themes() {
+			require_once 'our-themes.php';
 		}
 	}//end class
 
-	// register sf scripts
-	function awp_fgp_register_scripts() {
-
-		wp_enqueue_script( 'jquery' );
-
-		// js
-		wp_register_script( 'awl-fg-isotope-js', plugin_dir_url( __FILE__ ) . 'js/isotope.pkgd.js' );
-		wp_register_script( 'awl-fg-imagesloaded-js', plugin_dir_url( __FILE__ ) . 'js/imagesloaded.pkgd.js' );
-		wp_register_script( 'awl-fg-lightcase-js', plugin_dir_url( __FILE__ ) . 'js/lightcase.js' );
-
-		// CSS and JS start
-		wp_register_style( 'awl-fg-bootstrap-css', plugin_dir_url( __FILE__ ) . 'css/bootstrap.css' ); // v2.2.1
-		wp_register_style( 'awl-fg-lightcase-css', plugin_dir_url( __FILE__ ) . 'css/lightcase.css' );
-
-	}
-	add_action( 'wp_enqueue_scripts', 'awp_fgp_register_scripts' );
-
-	// Plugin Recommend
-		add_action( 'tgmpa_register', 'FGP_TXTDM_plugin_recommend' );
-	function FGP_TXTDM_plugin_recommend() {
-		$plugins = array(
-			array(
-				'name'     => 'Image Gallery – Lightbox Gallery',
-				'slug'     => 'new-image-gallery',
-				'required' => false,
-			),
-			array(
-				'name'     => 'Modal Popup Box – Popup Builder',
-				'slug'     => 'modal-popup-box',
-				'required' => false,
-			),
-			array(
-				'name'     => 'Photo Gallery',
-				'slug'     => 'new-photo-gallery',
-				'required' => false,
-			),
-		);
-		tgmpa( $plugins );
-	}
-
-	$fg_gallery_object = new Awl_Flickr_Gallery();
+	$awl_fg_gallery = new Awl_Flickr_Gallery();
 	require_once 'shortcode.php';
-	require_once 'class-tgm-plugin-activation.php';
 }
-?>
+

@@ -1,0 +1,20 @@
+.entry-content a.awp-flickr-gallery-link,
+.entry-summary a.awp-flickr-gallery-link,
+.taxonomy-description a.awp-flickr-gallery-link,
+.logged-in-as a.awp-flickr-gallery-link,
+.comment-content a.awp-flickr-gallery-link,
+.pingback .comment-body > a.awp-flickr-gallery-link,
+.textwidget a.awp-flickr-gallery-link,
+.entry-footer a.awp-flickr-gallery-link:hover,
+.site-info a.awp-flickr-gallery-link:hover {
+    box-shadow: none !important;
+}
+
+.awp-flickr-gallery-container {
+    padding-bottom: 15px;
+}
+
+.awp-flickr-post-title {
+    margin-right: 15px;
+    margin-left: 10px;
+}

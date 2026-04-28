@@ -1,11 +1,11 @@
-﻿=== Album Photostream Flickr Gallery ===
+=== Album Photostream Flickr Gallery ===
 Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkhan007, sharikkhan007, zishlife, FARAZFRANK
 Donate link: https://paypal.me/awplife
 Tags: flickr, flickr gallery, photo gallery, album gallery, flickr widget
-Requires at least: 4.0
+Requires at least: 5.0
 Tested up to: 6.9
-Stable tag: 1.5.2
-Requires PHP: 7.0
+Stable tag: 1.6.0
+Requires PHP: 7.4
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -135,6 +135,17 @@ Use the gallery settings to adjust columns, borders, and layout. For advanced cu
 For questions or issues, please visit the [plugin support forum](https://wordpress.org/support/plugin/wp-flickr-gallery/).
 
 == Changelog ==
+
+= 1.6.0 =
+* Security: Implemented robust nonce verification and current_user_can() capability checks for all administrative actions and post saves.
+* Security: Replaced unsafe unserialize() function with secure json_decode() for processing Flickr API data.
+* Standards: Refactored all inline CSS and JavaScript into external enqueued files for improved security and performance.
+* Standards: Standardized all internal constants and asset handles with a unique 'AWL_FG_' prefix to prevent collisions.
+* Compliance: Resolved WordPress 6.7+ "called incorrectly" notice by optimizing text domain loading on the init hook.
+* Optimization: Removed unused TGM Plugin Activation library (~126KB) and redundant promotional files to streamline the plugin.
+* Compliance: Stripped non-GPL compatible code and removed non-compliant "Pro" version links/upsells per repository guidelines.
+* Hardening: Added thorough input sanitization and existence checks (isset) for all user-submitted data to prevent PHP notices and ensure data integrity.
+* Tested with WordPress 6.9. And PHP 8.5
 
 = 1.5.2 =
 * Modern API Settings Page: Redesigned the API Settings page with a "Hyper-Modern" UI, featuring glassmorphism cards, mesh gradients, and improved input styling.
