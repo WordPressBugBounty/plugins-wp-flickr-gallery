@@ -3,7 +3,7 @@ Contributors: awordpresslife, razipathhan, hanif0991, muhammadshahid, fkfaisalkh
 Donate link: https://paypal.me/awplife
 Tags: flickr, flickr gallery, photo gallery, album gallery, flickr widget
 Requires at least: 5.0
-Tested up to: 6.9
+Tested up to: 7.1
 Stable tag: 1.6.0
 Requires PHP: 7.4
 License: GPLv2 or later 
