@@ -1,31 +1,32 @@
 jQuery(document).ready(function ($) {
     function refreshUI() {
-        if ($('input[name="flickr_gallery_type"]:checked').val() == 'album') {
-            $('.album_gallery').slideDown(300);
+        var galleryType = $('input[name="flickr_gallery_type"]:checked').val();
+        if (galleryType === 'album') {
+            $('.album_gallery').stop(true, true).slideDown(300);
         } else {
-            $('.album_gallery').slideUp(200);
+            $('.album_gallery').stop(true, true).slideUp(200);
         }
 
-        if ($('input[name="fg_gallery_title"]:checked').val() == 'true') {
-            $('.gallery_post_title').slideDown(300);
+        var showTitle = $('input[name="fg_gallery_title"]:checked').val();
+        if (showTitle === 'true') {
+            $('.gallery_post_title').stop(true, true).slideDown(300);
         } else {
-            $('.gallery_post_title').slideUp(200);
+            $('.gallery_post_title').stop(true, true).slideUp(200);
         }
     }
 
-    refreshUI();
-    $('input[name="flickr_gallery_type"], input[name="fg_gallery_title"]').change(refreshUI);
+    $('input[name="flickr_gallery_type"], input[name="fg_gallery_title"]').on('change', refreshUI);
 
     // Range Slider Live
-    $('.awl-hm-range').on('input', function () {
+    $('.awl-hm-range').on('input change', function () {
         $('#size-display').text($(this).val() + 'px');
     });
 
     // Sync Native Color Picker
-    $('#color-picker-native').on('input', function () {
+    $('#color-picker-native').on('input change', function () {
         $('#fg_gallery_titlecolor').val($(this).val());
     });
-    $('#fg_gallery_titlecolor').on('input', function () {
+    $('#fg_gallery_titlecolor').on('input change', function () {
         $('#color-picker-native').val($(this).val());
     });
 });

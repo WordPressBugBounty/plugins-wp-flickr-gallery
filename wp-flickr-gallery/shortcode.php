@@ -7,30 +7,46 @@ if (!defined('ABSPATH')) {
  * Flickr Gallery Shortcode
  */
 add_shortcode('FGAL', 'awl_flickr_gallery_shortcode');
+add_shortcode('fgal', 'awl_flickr_gallery_shortcode');
 function awl_flickr_gallery_shortcode($post_id)
 {
 	ob_start();
 
-	// Assets are enqueued via wp_enqueue_scripts hook in main class for consistency
+	// Enqueue all required assets
 	wp_enqueue_style('awl-fg-bootstrap-css');
 	wp_enqueue_style('awl-fg-lightcase-css');
 	wp_enqueue_style('awl-fg-shortcode-css');
+	wp_enqueue_style('awl-fg-frontend-css');
 
 	wp_enqueue_script('awl-fg-isotope-js');
 	wp_enqueue_script('awl-fg-imagesloaded-js');
 	wp_enqueue_script('awl-fg-lightcase-js');
+	wp_enqueue_script('awl-fg-frontend-js');
 
-	$flickr_gallery_id = isset($post_id['id']) ? $post_id['id'] : 0;
-	if (!$flickr_gallery_id) return '';
+	$flickr_gallery_id = 0;
+	if ( is_array( $post_id ) ) {
+		if ( isset( $post_id['id'] ) ) {
+			$flickr_gallery_id = absint( $post_id['id'] );
+		} elseif ( isset( $post_id[0] ) ) {
+			$flickr_gallery_id = absint( $post_id[0] );
+		}
+	}
+	if ( ! $flickr_gallery_id ) {
+		return '';
+	}
 
 	// get Flickr API Settings
 	$flickr_api_settings = get_option('flickr_api_settings');
-	$flickr_api_key = isset($flickr_api_settings['flickr_api_key']) ? $flickr_api_settings['flickr_api_key'] : '';
-	$flickr_user_id = isset($flickr_api_settings['flickr_user_id']) ? $flickr_api_settings['flickr_user_id'] : '';
+	$flickr_api_key = is_array($flickr_api_settings) && isset($flickr_api_settings['flickr_api_key']) ? $flickr_api_settings['flickr_api_key'] : '';
+	$flickr_user_id = is_array($flickr_api_settings) && isset($flickr_api_settings['flickr_user_id']) ? $flickr_api_settings['flickr_user_id'] : '';
 
 	// load post settings
 	$flickr_gallery_settings = get_post_meta($flickr_gallery_id, 'awl_fg_post_settings_' . $flickr_gallery_id, true);
-	$flickr_gallery_type = isset($flickr_gallery_settings['flickr_gallery_type']) ? $flickr_gallery_settings['flickr_gallery_type'] : 'photostream';
+	if (!is_array($flickr_gallery_settings)) {
+		$flickr_gallery_settings = array();
+	}
+
+	$flickr_gallery_type = (isset($flickr_gallery_settings['flickr_gallery_type']) && 'album' === $flickr_gallery_settings['flickr_gallery_type']) ? 'album' : 'photostream';
 
 	// photostream settings
 	if ($flickr_gallery_type == 'photostream') {
@@ -44,26 +60,40 @@ function awl_flickr_gallery_shortcode($post_id)
 	}
 
 	// common settings
-	$col_desktops = isset($flickr_gallery_settings['col_desktops']) ? $flickr_gallery_settings['col_desktops'] : 'col-md-4';
+	$col_desktops = (isset($flickr_gallery_settings['col_desktops']) && 'col-md-3' === $flickr_gallery_settings['col_desktops']) ? 'col-md-3' : 'col-md-4';
+
 	$thumb_img_size = isset($flickr_gallery_settings['thumb_img_size']) ? $flickr_gallery_settings['thumb_img_size'] : 'url_q';
+	if ($thumb_img_size && strpos($thumb_img_size, 'url_') !== 0) {
+		$thumb_img_size = 'url_' . $thumb_img_size;
+	}
+
 	$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_m';
+	if ('b' === $lightbox_img_size) {
+		$lightbox_img_size = 'url_l';
+	} elseif ($lightbox_img_size && strpos($lightbox_img_size, 'url_') !== 0) {
+		$lightbox_img_size = 'url_' . $lightbox_img_size;
+	}
+
 	$photo_titlestyle = isset($flickr_gallery_settings['photo_titlestyle']) ? $flickr_gallery_settings['photo_titlestyle'] : 1;
-	$apply_light_box = isset($flickr_gallery_settings['apply_light_box']) ? $flickr_gallery_settings['apply_light_box'] : 'true';
+	$apply_light_box = (isset($flickr_gallery_settings['apply_light_box']) && in_array($flickr_gallery_settings['apply_light_box'], array('false', 'no'), true)) ? 'false' : 'true';
 
 	// gallery post title settings
 	$fg_title = get_the_title($flickr_gallery_id);
-	$fg_gallery_title = isset($flickr_gallery_settings['fg_gallery_title']) ? $flickr_gallery_settings['fg_gallery_title'] : 'true';
-	$fg_gallery_titlecolor = isset($flickr_gallery_settings['fg_gallery_titlecolor']) ? $flickr_gallery_settings['fg_gallery_titlecolor'] : '#000000';
-	$fg_gallery_titlesize = isset($flickr_gallery_settings['fg_gallery_titlesize']) ? $flickr_gallery_settings['fg_gallery_titlesize'] : 16;
-	$fg_gallery_titlealighment = isset($flickr_gallery_settings['fg_gallery_titlealighment']) ? $flickr_gallery_settings['fg_gallery_titlealighment'] : 'left';
+	$fg_gallery_title = (isset($flickr_gallery_settings['fg_gallery_title']) && 'false' === $flickr_gallery_settings['fg_gallery_title']) ? 'false' : 'true';
+	$fg_gallery_titlecolor = isset($flickr_gallery_settings['fg_gallery_titlecolor']) ? sanitize_hex_color($flickr_gallery_settings['fg_gallery_titlecolor']) : '#000000';
+	if (!$fg_gallery_titlecolor) {
+		$fg_gallery_titlecolor = '#000000';
+	}
+	$fg_gallery_titlesize = isset($flickr_gallery_settings['fg_gallery_titlesize']) ? absint($flickr_gallery_settings['fg_gallery_titlesize']) : 16;
+	$fg_gallery_titlealighment = isset($flickr_gallery_settings['fg_gallery_titlealighment']) ? sanitize_text_field($flickr_gallery_settings['fg_gallery_titlealighment']) : 'left';
 
-	echo '<div class="awp-flickr-gallery-container single-photostream-' . esc_attr($flickr_gallery_id) . '">';
+	echo '<div class="awp-flickr-gallery-wrapper flickr-gallery-wrapper-' . esc_attr($flickr_gallery_id) . '">';
 
 	// gallery title
-	if ($fg_gallery_title == 'true') {
+	if ($fg_gallery_title === 'true' && $fg_title) {
 		?>
 		<p class="awp-flickr-post-title"
-			style="color:<?php echo esc_attr($fg_gallery_titlecolor); ?>; font-size: <?php echo esc_attr($fg_gallery_titlesize); ?>px ; text-align:<?php echo esc_attr($fg_gallery_titlealighment); ?>;">
+			style="color:<?php echo esc_attr($fg_gallery_titlecolor); ?>; font-size: <?php echo esc_attr($fg_gallery_titlesize); ?>px; text-align:<?php echo esc_attr($fg_gallery_titlealighment); ?>;">
 			<?php echo esc_html($fg_title); ?>
 		</p>
 		<?php

@@ -30,6 +30,7 @@ $flickr_api_settings = get_option('flickr_api_settings');
 		</p>
 
 		<form id="flickr-setting-form">
+			<?php wp_nonce_field('fg_api_setting_nonce_key', 'fg_api_security'); ?>
 			<?php
 			$flickr_user_id = (isset($flickr_api_settings['flickr_user_id'])) ? $flickr_api_settings['flickr_user_id'] : '';
 			$flickr_api_key = (isset($flickr_api_settings['flickr_api_key'])) ? $flickr_api_settings['flickr_api_key'] : '';
@@ -62,17 +63,18 @@ $flickr_api_settings = get_option('flickr_api_settings');
 				</span>
 			</div>
 
-			<div style="margin-top: 40px; display: flex; align-items: center;">
-				<button type="button" id="save_flickr_api_setting" class="awl-hm-btn"
-					onclick="FlickrAPISaveSettings();">
+			<div style="margin-top: 40px; display: flex; align-items: center; flex-wrap: wrap; gap: 15px;">
+				<button type="submit" id="save_flickr_api_setting" class="awl-hm-btn">
 					<i class="fa fa-save"></i> <?php esc_html_e('Save Settings', 'wp-flickr-gallery'); ?>
 				</button>
 
-				<div id="fg_setting_load" name="fg_setting_load" style="display:none;">
+				<div id="fg_setting_load" name="fg_setting_load" style="display:none; align-items: center;">
 					<i class="fa fa-circle-o-notch fa-spin fa-2x fa-fw"></i>
 					<span style="margin-left: 10px;"><?php esc_html_e('Saving...', 'wp-flickr-gallery'); ?></span>
 				</div>
 			</div>
+
+			<div id="fg_api_message" style="display:none; margin-top: 20px; padding: 12px 16px; border-radius: 8px; font-weight: 500;"></div>
 		</form>
 	</div>
 </div>

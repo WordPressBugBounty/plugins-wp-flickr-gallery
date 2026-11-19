@@ -5,6 +5,9 @@ if (!defined('ABSPATH')) {
 
 // Flickr Post Settings
 $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $post->ID, true);
+if (!is_array($flickr_gallery_settings)) {
+	$flickr_gallery_settings = array();
+}
 ?>
 
 <div class="awl-hm-wrapper animate-in">
@@ -25,7 +28,7 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 					<?php esc_html_e('Gallery Source', 'wp-flickr-gallery'); ?>
 				</h2>
 
-				<?php $flickr_gallery_type = isset($flickr_gallery_settings['flickr_gallery_type']) ? $flickr_gallery_settings['flickr_gallery_type'] : 'album'; ?>
+				<?php $flickr_gallery_type = (isset($flickr_gallery_settings['flickr_gallery_type']) && 'album' === $flickr_gallery_settings['flickr_gallery_type']) ? 'album' : 'photostream'; ?>
 
 				<div class="awl-hm-group">
 					<label class="awl-hm-label"><?php esc_html_e('Content Type', 'wp-flickr-gallery'); ?></label>
@@ -47,8 +50,13 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 					</div>
 				</div>
 
-				<div class="album_gallery awl-hm-group" style="display:none;">
-					<label class="awl-hm-label"><?php esc_html_e('Select Album', 'wp-flickr-gallery'); ?></label>
+				<div class="album_gallery awl-hm-group" style="<?php echo ('album' === $flickr_gallery_type) ? '' : 'display:none;'; ?>">
+					<label class="awl-hm-label" style="display: flex; justify-content: space-between; align-items: center;">
+						<span><?php esc_html_e('Select Album', 'wp-flickr-gallery'); ?></span>
+						<a href="<?php echo esc_url(add_query_arg('refresh_albums', '1')); ?>" title="<?php esc_attr_e('Sync albums from Flickr', 'wp-flickr-gallery'); ?>" style="font-size: 11px; text-decoration: none; color: var(--hm-primary); font-weight: normal;">
+							<span class="dashicons dashicons-update" style="font-size: 13px; width: 13px; height: 13px; vertical-align: middle;"></span> <?php esc_html_e('Sync Albums', 'wp-flickr-gallery'); ?>
+						</a>
+					</label>
 					<?php
 					$flickr_album_id = isset($flickr_gallery_settings['flickr_album_id']) ? $flickr_gallery_settings['flickr_album_id'] : '';
 					$flickr_api_settings = get_option('flickr_api_settings');
@@ -59,34 +67,58 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 					if ($flickr_user_id && $flickr_api_key) {
 						echo '<select name="flickr_album_id" class="awl-hm-select">';
 
-						$params = array(
-							'api_key' => $flickr_api_key, 
-							'user_id' => $flickr_user_id, 
-							'method' => 'flickr.photosets.getList', 
-							'format' => 'php_serial'
-						);
-						$encoded_params = [];
-						foreach ($params as $k => $v) {
-							$encoded_params[] = urlencode($k) . '=' . urlencode($v);
+						$album_cache_key = 'awl_fg_user_albums_' . md5($flickr_user_id . $flickr_api_key);
+						if ( isset($_GET['refresh_albums']) ) {
+							delete_transient( $album_cache_key );
 						}
-						$url = 'https://api.flickr.com/services/rest/?' . implode('&', $encoded_params);
-						$rsp = wp_remote_get($url);
+						$album_list = get_transient($album_cache_key);
 
-						if (!is_wp_error($rsp)) {
-							$rsp_obj = unserialize($rsp['body']);
-							if (isset($rsp_obj['photosets']['photoset'])) {
-								foreach ($rsp_obj['photosets']['photoset'] as $album) {
-									echo '<option value="' . esc_attr($album['id']) . '" ' . selected($flickr_album_id, $album['id'], false) . '>' . esc_html($album['title']['_content']) . '</option>';
+						if (false === $album_list) {
+							$params = array(
+								'api_key' => $flickr_api_key, 
+								'user_id' => $flickr_user_id, 
+								'method' => 'flickr.photosets.getList', 
+								'format' => 'json',
+								'nojsoncallback' => 1
+							);
+							$encoded_params = array();
+							foreach ($params as $k => $v) {
+								$encoded_params[] = urlencode($k) . '=' . urlencode($v);
+							}
+							$url = 'https://api.flickr.com/services/rest/?' . implode('&', $encoded_params);
+							$rsp = wp_remote_get($url, array('timeout' => 5));
+
+							if (!is_wp_error($rsp)) {
+								$rsp_obj = json_decode($rsp['body'], true);
+								if (isset($rsp_obj['photosets']['photoset']) && is_array($rsp_obj['photosets']['photoset'])) {
+									$album_list = $rsp_obj['photosets']['photoset'];
+									set_transient($album_cache_key, $album_list, HOUR_IN_SECONDS);
+								} else {
+									$album_list = array();
 								}
 							} else {
-								echo '<option>' . esc_html__('No Albums Found', 'wp-flickr-gallery') . '</option>';
+								$album_list = false;
+							}
+						}
+
+						if (is_array($album_list)) {
+							if (!empty($album_list)) {
+								foreach ($album_list as $album) {
+									$album_title = isset($album['title']['_content']) ? $album['title']['_content'] : (isset($album['title']) ? $album['title'] : __('Untitled Album', 'wp-flickr-gallery'));
+									echo '<option value="' . esc_attr($album['id']) . '" ' . selected($flickr_album_id, $album['id'], false) . '>' . esc_html($album_title) . '</option>';
+								}
+							} else {
+								echo '<option value="">' . esc_html__('No Albums Found', 'wp-flickr-gallery') . '</option>';
 							}
 						} else {
-							echo '<option>' . esc_html__('API Error', 'wp-flickr-gallery') . '</option>';
+							if ( ! empty( $flickr_album_id ) ) {
+								echo '<option value="' . esc_attr( $flickr_album_id ) . '" selected="selected">' . esc_html__( 'Saved Album: ', 'wp-flickr-gallery' ) . esc_html( $flickr_album_id ) . '</option>';
+							}
+							echo '<option value="">' . esc_html__( 'API Error: Could not connect to Flickr', 'wp-flickr-gallery' ) . '</option>';
 						}
 						echo '</select>';
 					} else {
-						echo '<div class="awl-hm-sub">' . esc_html__('Please configure API Keys first.', 'wp-flickr-gallery') . '</div>';
+						echo '<div class="awl-hm-sub">' . esc_html__('Please configure API Keys first under Flickr Gallery -> Flickr API Settings.', 'wp-flickr-gallery') . '</div>';
 					}
 					?>
 				</div>
@@ -100,7 +132,7 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 
 				<div class="awl-hm-group">
 					<label class="awl-hm-label"><?php esc_html_e('Columns', 'wp-flickr-gallery'); ?></label>
-					<?php $col_desktops = isset($flickr_gallery_settings['col_desktops']) ? $flickr_gallery_settings['col_desktops'] : 'col-md-3'; ?>
+					<?php $col_desktops = (isset($flickr_gallery_settings['col_desktops']) && 'col-md-3' === $flickr_gallery_settings['col_desktops']) ? 'col-md-3' : 'col-md-4'; ?>
 					<select name="col_desktops" class="awl-hm-select">
 						<option value="col-md-4" <?php selected($col_desktops, 'col-md-4'); ?>><?php esc_html_e('3 Columns (Wide)', 'wp-flickr-gallery'); ?></option>
 						<option value="col-md-3" <?php selected($col_desktops, 'col-md-3'); ?>><?php esc_html_e('4 Columns (Standard)', 'wp-flickr-gallery'); ?></option>
@@ -109,7 +141,12 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 
 				<div class="awl-hm-group">
 					<label class="awl-hm-label"><?php esc_html_e('Thumbnail Size', 'wp-flickr-gallery'); ?></label>
-					<?php $thumb_img_size = isset($flickr_gallery_settings['thumb_img_size']) ? $flickr_gallery_settings['thumb_img_size'] : 'url_q'; ?>
+					<?php 
+					$thumb_img_size = isset($flickr_gallery_settings['thumb_img_size']) ? $flickr_gallery_settings['thumb_img_size'] : 'url_q';
+					if ($thumb_img_size && strpos($thumb_img_size, 'url_') !== 0) {
+						$thumb_img_size = 'url_' . $thumb_img_size;
+					}
+					?>
 					<select name="thumb_img_size" class="awl-hm-select">
 						<option value="url_sq" <?php selected($thumb_img_size, 'url_sq'); ?>><?php esc_html_e('Square 75px', 'wp-flickr-gallery'); ?></option>
 						<option value="url_q" <?php selected($thumb_img_size, 'url_q'); ?>><?php esc_html_e('Large Square 150px', 'wp-flickr-gallery'); ?></option>
@@ -134,8 +171,8 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 				</h2>
 
 				<div class="awl-hm-group">
-					<label class="awl-hm-label"><?php esc_html_e('Show Title', 'wp-flickr-gallery'); ?></label>
-					<?php $fg_gallery_title = isset($flickr_gallery_settings['fg_gallery_title']) ? $flickr_gallery_settings['fg_gallery_title'] : 'true'; ?>
+					<label class="awl-hm-label"><?php esc_html_e('Show Gallery Title', 'wp-flickr-gallery'); ?></label>
+					<?php $fg_gallery_title = (isset($flickr_gallery_settings['fg_gallery_title']) && 'false' === $flickr_gallery_settings['fg_gallery_title']) ? 'false' : 'true'; ?>
 					<div class="awl-hm-switch-group">
 						<label class="awl-hm-switch-item">
 							<input type="radio" name="fg_gallery_title" value="true" <?php checked($fg_gallery_title, 'true'); ?>>
@@ -148,7 +185,7 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 					</div>
 				</div>
 
-				<div class="gallery_post_title">
+				<div class="gallery_post_title" style="<?php echo ('true' === $fg_gallery_title) ? '' : 'display:none;'; ?>">
 					<div class="awl-hm-group">
 						<label class="awl-hm-label"><?php esc_html_e('Alignment', 'wp-flickr-gallery'); ?></label>
 						<?php $fg_gallery_titlealighment = isset($flickr_gallery_settings['fg_gallery_titlealighment']) ? $flickr_gallery_settings['fg_gallery_titlealighment'] : 'left'; ?>
@@ -170,7 +207,7 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 
 					<div class="awl-hm-group">
 						<label class="awl-hm-label"><?php esc_html_e('Font Size', 'wp-flickr-gallery'); ?></label>
-						<?php $fg_gallery_titlesize = isset($flickr_gallery_settings['fg_gallery_titlesize']) ? $flickr_gallery_settings['fg_gallery_titlesize'] : 16; ?>
+						<?php $fg_gallery_titlesize = isset($flickr_gallery_settings['fg_gallery_titlesize']) ? absint($flickr_gallery_settings['fg_gallery_titlesize']) : 16; ?>
 						<div class="awl-hm-range-wrap">
 							<input type="range" name="fg_gallery_titlesize" class="awl-hm-range" min="10" max="60"
 								value="<?php echo esc_attr($fg_gallery_titlesize); ?>">
@@ -181,7 +218,7 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 
 					<div class="awl-hm-group">
 						<label class="awl-hm-label"><?php esc_html_e('Title Color', 'wp-flickr-gallery'); ?></label>
-						<?php $fg_gallery_titlecolor = isset($flickr_gallery_settings['fg_gallery_titlecolor']) ? $flickr_gallery_settings['fg_gallery_titlecolor'] : '#000000'; ?>
+						<?php $fg_gallery_titlecolor = (!empty($flickr_gallery_settings['fg_gallery_titlecolor']) && preg_match('/^#[a-f0-9]{6}$/i', $flickr_gallery_settings['fg_gallery_titlecolor'])) ? $flickr_gallery_settings['fg_gallery_titlecolor'] : '#000000'; ?>
 
 						<div class="awl-hm-color-wrapper">
 							<input type="color" class="awl-hm-color-swatch" id="color-picker-native"
@@ -201,7 +238,7 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 
 				<div class="awl-hm-group">
 					<label class="awl-hm-label"><?php esc_html_e('Lightbox', 'wp-flickr-gallery'); ?></label>
-					<?php $apply_light_box = isset($flickr_gallery_settings['apply_light_box']) ? $flickr_gallery_settings['apply_light_box'] : 'true'; ?>
+					<?php $apply_light_box = (isset($flickr_gallery_settings['apply_light_box']) && in_array($flickr_gallery_settings['apply_light_box'], array('false', 'no'), true)) ? 'false' : 'true'; ?>
 					<div class="awl-hm-switch-group">
 						<label class="awl-hm-switch-item">
 							<input type="radio" name="apply_light_box" value="true" <?php checked($apply_light_box, 'true'); ?>>
@@ -217,7 +254,14 @@ $flickr_gallery_settings = get_post_meta($post->ID, 'awl_fg_post_settings_' . $p
 
 				<div class="awl-hm-group">
 					<label class="awl-hm-label"><?php esc_html_e('Lightbox Quality', 'wp-flickr-gallery'); ?></label>
-					<?php $lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_m'; ?>
+					<?php 
+					$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_m';
+					if ('b' === $lightbox_img_size) {
+						$lightbox_img_size = 'url_l';
+					} elseif ($lightbox_img_size && strpos($lightbox_img_size, 'url_') !== 0) {
+						$lightbox_img_size = 'url_' . $lightbox_img_size;
+					}
+					?>
 					<select name="lightbox_img_size" class="awl-hm-select">
 						<option value="url_m" <?php selected($lightbox_img_size, 'url_m'); ?>><?php esc_html_e('Medium - 500px', 'wp-flickr-gallery'); ?></option>
 						<option value="url_l" <?php selected($lightbox_img_size, 'url_l'); ?>><?php esc_html_e('Large - 1024px', 'wp-flickr-gallery'); ?></option>

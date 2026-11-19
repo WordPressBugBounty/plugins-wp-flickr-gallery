@@ -4,7 +4,7 @@ Donate link: https://paypal.me/awplife
 Tags: flickr, flickr gallery, photo gallery, album gallery, flickr widget
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 1.6.0
+Stable tag: 1.6.1
 Requires PHP: 7.4
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -136,6 +136,16 @@ For questions or issues, please visit the [plugin support forum](https://wordpre
 
 == Changelog ==
 
+= 1.6.1 =
+* Performance: Drastically improved admin backend speed by eliminating over 400KB of redundant scripts, styles, and media modal assets from the gallery post editor.
+* Optimization: Implemented transient caching (1 hour) for album fetching and API responses with a manual "Sync Albums" button, stopping slow, blocking HTTP requests on edit screens.
+* Fix: Fixed settings changes not reflecting on the frontend by automatically invalidating gallery photo and album transients immediately upon saving post settings.
+* Fix: Enhanced API Settings form with submit locks, AJAX status notifications, and strict nonce security validation.
+* Fix: Prevented loss of selected album in post editor if Flickr API is temporarily unreachable or slow.
+* Compatibility: Fully tested and optimized for PHP 8.2+ with zero notices or warnings.
+* Frontend: Improved responsive grid layout for mobile and tablet screens, ensuring smooth masonry rendering and lightbox integration.
+* Shortcode: Added support for case-insensitive shortcodes ([FGAL] and [fgal]) with named (id=) and positional parameters.
+
 = 1.6.0 =
 * Security: Implemented robust nonce verification and current_user_can() capability checks for all administrative actions and post saves.
 * Security: Replaced unsafe unserialize() function with secure json_decode() for processing Flickr API data.
@@ -196,5 +206,5 @@ For questions or issues, please visit the [plugin support forum](https://wordpre
 
 == Upgrade Notice ==
 
-= 1.5.1 =
-Tested with WordPress 6.9 for compatibility.
+= 1.6.1 =
+Recommended update: includes major admin performance improvements, instant cache invalidation on save, and PHP 8.2+ compatibility enhancements.

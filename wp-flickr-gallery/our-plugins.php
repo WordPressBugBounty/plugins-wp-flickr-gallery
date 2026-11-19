@@ -191,27 +191,27 @@ usort( $filtered_plugins, function ( $a, $b ) {
 <div class="wrap ig-our-plugins-wrap">
     <header class="ig-our-plugins-header">
         <div class="ig-header-content">
-            <h1><?php esc_html_e( 'Our WordPress Ecosystem', 'new-image-gallery' ); ?></h1>
-            <p><?php esc_html_e( 'Discover powerful tools designed to simplify your WordPress workflow. High-performance plugins built by A WP Life.', 'new-image-gallery' ); ?></p>
+            <h1><?php esc_html_e( 'Our WordPress Ecosystem', 'wp-flickr-gallery' ); ?></h1>
+            <p><?php esc_html_e( 'Discover powerful tools designed to simplify your WordPress workflow. High-performance plugins built by A WP Life.', 'wp-flickr-gallery' ); ?></p>
         </div>
         <div class="ig-header-stats">
             <div class="ig-stat-item">
                 <span class="ig-stat-value">500k+</span>
-                <span class="ig-stat-label"><?php esc_html_e( 'Active Installs', 'new-image-gallery' ); ?></span>
+                <span class="ig-stat-label"><?php esc_html_e( 'Active Installs', 'wp-flickr-gallery' ); ?></span>
             </div>
         </div>
     </header>
 
     <!-- Category Filters -->
     <nav class="ig-plugins-filters">
-        <button class="ig-filter-btn active" data-filter="all"><?php esc_html_e( 'All Plugins', 'new-image-gallery' ); ?></button>
-        <button class="ig-filter-btn" data-filter="new"><?php esc_html_e( 'New Releases', 'new-image-gallery' ); ?></button>
-        <button class="ig-filter-btn" data-filter="popular"><?php esc_html_e( 'Most Popular', 'new-image-gallery' ); ?></button>
-        <button class="ig-filter-btn" data-filter="marketing"><?php esc_html_e( 'Marketing & Growth', 'new-image-gallery' ); ?></button>
-        <button class="ig-filter-btn" data-filter="social"><?php esc_html_e( 'Social Media', 'new-image-gallery' ); ?></button>
-        <button class="ig-filter-btn" data-filter="technical"><?php esc_html_e( 'Technical Tools', 'new-image-gallery' ); ?></button>
+        <button class="ig-filter-btn active" data-filter="all"><?php esc_html_e( 'All Plugins', 'wp-flickr-gallery' ); ?></button>
+        <button class="ig-filter-btn" data-filter="new"><?php esc_html_e( 'New Releases', 'wp-flickr-gallery' ); ?></button>
+        <button class="ig-filter-btn" data-filter="popular"><?php esc_html_e( 'Most Popular', 'wp-flickr-gallery' ); ?></button>
+        <button class="ig-filter-btn" data-filter="marketing"><?php esc_html_e( 'Marketing & Growth', 'wp-flickr-gallery' ); ?></button>
+        <button class="ig-filter-btn" data-filter="social"><?php esc_html_e( 'Social Media', 'wp-flickr-gallery' ); ?></button>
+        <button class="ig-filter-btn" data-filter="technical"><?php esc_html_e( 'Technical Tools', 'wp-flickr-gallery' ); ?></button>
         
-        <a href="<?php echo esc_url( add_query_arg( 'refresh_plugins', '1' ) ); ?>" class="ig-refresh-link" title="<?php esc_attr_e( 'Sync with WordPress.org', 'new-image-gallery' ); ?>">
+        <a href="<?php echo esc_url( add_query_arg( 'refresh_plugins', '1' ) ); ?>" class="ig-refresh-link" title="<?php esc_attr_e( 'Sync with WordPress.org', 'wp-flickr-gallery' ); ?>">
             <span class="dashicons dashicons-update"></span>
         </a>
     </nav>
@@ -219,10 +219,10 @@ usort( $filtered_plugins, function ( $a, $b ) {
 	<?php if ( empty( $filtered_plugins ) ) : ?>
         <div class="ig-error-wrap">
             <span class="dashicons dashicons-warning"></span>
-            <h2><?php esc_html_e( 'Unable to fetch our plugins', 'new-image-gallery' ); ?></h2>
-            <p><?php esc_html_e( 'We encountered an error connecting to WordPress.org. Please try again later.', 'new-image-gallery' ); ?></p>
+            <h2><?php esc_html_e( 'Unable to fetch our plugins', 'wp-flickr-gallery' ); ?></h2>
+            <p><?php esc_html_e( 'We encountered an error connecting to WordPress.org. Please try again later.', 'wp-flickr-gallery' ); ?></p>
             <a href="<?php echo esc_url( 'https://profiles.wordpress.org/awordpresslife/#content-plugins' ); ?>" target="_blank" class="ig-btn ig-btn-primary" style="margin-top: 20px;">
-				<?php esc_html_e( 'Visit Our WordPress Profile', 'new-image-gallery' ); ?>
+				<?php esc_html_e( 'Visit Our WordPress Profile', 'wp-flickr-gallery' ); ?>
             </a>
         </div>
 	<?php else : ?>
@@ -252,7 +252,7 @@ usort( $filtered_plugins, function ( $a, $b ) {
 				?>
                 <div class="ig-plugin-card <?php echo esc_attr( $cat_classes ); ?>">
 					<?php if ( $is_installed ) : ?>
-                        <div class="ig-plugin-status"><?php esc_html_e( 'INSTALLED', 'new-image-gallery' ); ?></div>
+                        <div class="ig-plugin-status"><?php esc_html_e( 'INSTALLED', 'wp-flickr-gallery' ); ?></div>
 					<?php endif; ?>
 
                     <div class="ig-plugin-banner">
@@ -272,16 +272,16 @@ usort( $filtered_plugins, function ( $a, $b ) {
                             </div>
                             <div class="ig-plugin-meta-item">
                                 <span class="dashicons dashicons-download"></span>
-								<?php echo esc_html( $install_count ); ?> <?php esc_html_e( 'Installs', 'new-image-gallery' ); ?>
+								<?php echo esc_html( $install_count ); ?> <?php esc_html_e( 'Installs', 'wp-flickr-gallery' ); ?>
                             </div>
                         </div>
 
                         <div class="ig-plugin-actions">
                             <a href="<?php echo esc_url( 'https://wordpress.org/plugins/' . $plugin['slug'] . '/' ); ?>" target="_blank" class="ig-btn ig-btn-secondary">
-								<?php esc_html_e( 'Details', 'new-image-gallery' ); ?>
+								<?php esc_html_e( 'Details', 'wp-flickr-gallery' ); ?>
                             </a>
                             <a href="<?php echo esc_url( admin_url( 'plugin-install.php?tab=plugin-information&plugin=' . $plugin['slug'] . '&TB_iframe=true&width=772&height=550' ) ); ?>" class="ig-btn ig-btn-primary thickbox">
-								<?php esc_html_e( 'Install Now', 'new-image-gallery' ); ?>
+								<?php esc_html_e( 'Install Now', 'wp-flickr-gallery' ); ?>
                             </a>
                         </div>
                     </div>

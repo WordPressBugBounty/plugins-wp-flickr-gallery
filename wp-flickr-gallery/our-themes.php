@@ -8,23 +8,36 @@ if ( ! function_exists( 'themes_api' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/theme-install.php';
 }
 
-$author_slug = 'awordpresslife';
-$api_args = array(
-	'author' => $author_slug,
-	'fields' => array(
-		'description'     => true,
-		'active_installs' => true,
-		'rating'          => true,
-		'num_ratings'     => true,
-		'screenshot_url'  => true,
-	),
-);
+$transient_key = 'awl_fg_our_themes_data';
 
-$response = themes_api( 'query_themes', $api_args );
-$themes = array();
+// Force refresh the data
+if ( isset( $_GET['refresh_themes'] ) ) {
+	delete_transient( $transient_key );
+}
 
-if ( ! is_wp_error( $response ) && isset( $response->themes ) ) {
-	$themes = $response->themes;
+$themes = get_transient( $transient_key );
+$response = null;
+
+if ( false === $themes ) {
+	$author_slug = 'awordpresslife';
+	$api_args = array(
+		'author' => $author_slug,
+		'fields' => array(
+			'description'     => true,
+			'active_installs' => true,
+			'rating'          => true,
+			'num_ratings'     => true,
+			'screenshot_url'  => true,
+		),
+	);
+
+	$response = themes_api( 'query_themes', $api_args );
+	$themes = array();
+
+	if ( ! is_wp_error( $response ) && isset( $response->themes ) ) {
+		$themes = $response->themes;
+		set_transient( $transient_key, $themes, 12 * HOUR_IN_SECONDS );
+	}
 }
 
 // Sort by rating (highest first), then by active installs descending
@@ -47,23 +60,23 @@ usort( $themes, function ( $a, $b ) {
 ?>
 <div class="wrap ig-our-plugins-wrap">
     <header class="ig-our-plugins-header">
-        <h1><?php esc_html_e( 'Our WordPress Themes', 'new-image-gallery' ); ?></h1>
-        <p><?php esc_html_e( 'Beautifully crafted, high-performance themes for any WordPress project. Experience premium design with A WP Life.', 'new-image-gallery' ); ?></p>
+        <h1><?php esc_html_e( 'Our WordPress Themes', 'wp-flickr-gallery' ); ?></h1>
+        <p><?php esc_html_e( 'Beautifully crafted, high-performance themes for any WordPress project. Experience premium design with A WP Life.', 'wp-flickr-gallery' ); ?></p>
     </header>
 
 	<?php if ( is_wp_error( $response ) ) : ?>
         <div class="ig-error-wrap">
             <span class="dashicons dashicons-warning"></span>
-            <h2><?php esc_html_e( 'Unable to fetch our themes', 'new-image-gallery' ); ?></h2>
+            <h2><?php esc_html_e( 'Unable to fetch our themes', 'wp-flickr-gallery' ); ?></h2>
             <p><?php echo esc_html( $response->get_error_message() ); ?></p>
             <a href="<?php echo esc_url( 'https://profiles.wordpress.org/awordpresslife/#content-themes' ); ?>" target="_blank" class="ig-btn ig-btn-primary" style="margin-top: 20px;">
-				<?php esc_html_e( 'Visit Our WordPress Profile', 'new-image-gallery' ); ?>
+				<?php esc_html_e( 'Visit Our WordPress Profile', 'wp-flickr-gallery' ); ?>
             </a>
         </div>
 	<?php elseif ( empty( $themes ) ) : ?>
         <div class="ig-loading-wrap">
             <div class="ig-spinner"></div>
-            <h3><?php esc_html_e( 'Refreshing our theme collection...', 'new-image-gallery' ); ?></h3>
+            <h3><?php esc_html_e( 'Refreshing our theme collection...', 'wp-flickr-gallery' ); ?></h3>
         </div>
 	<?php else : ?>
         <div class="ig-plugins-grid">
@@ -97,16 +110,16 @@ usort( $themes, function ( $a, $b ) {
                             </div>
                             <div class="ig-plugin-meta-item">
                                 <span class="dashicons dashicons-download"></span>
-								<?php echo esc_html( $install_count ); ?> <?php esc_html_e( 'Installs', 'new-image-gallery' ); ?>
+								<?php echo esc_html( $install_count ); ?> <?php esc_html_e( 'Installs', 'wp-flickr-gallery' ); ?>
                             </div>
                         </div>
 
                         <div class="ig-plugin-actions">
                             <a href="<?php echo esc_url( $preview_url ); ?>" target="_blank" class="ig-btn ig-btn-secondary">
-								<?php esc_html_e( 'Live Preview', 'new-image-gallery' ); ?>
+								<?php esc_html_e( 'Live Preview', 'wp-flickr-gallery' ); ?>
                             </a>
                             <a href="<?php echo esc_url( admin_url( 'theme-install.php?theme=' . $theme['slug'] ) ); ?>" class="ig-btn ig-btn-primary">
-								<?php esc_html_e( 'Install Now', 'new-image-gallery' ); ?>
+								<?php esc_html_e( 'Install Now', 'wp-flickr-gallery' ); ?>
                             </a>
                         </div>
                     </div>

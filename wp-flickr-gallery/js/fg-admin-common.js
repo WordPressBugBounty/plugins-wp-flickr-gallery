@@ -18,7 +18,7 @@ function copyToClipboard(element) {
     document.execCommand("copy");
     $temp.remove();
     jQuery(element).select();
-    jQuery("#fgal-copy-code").fadeIn();
+    jQuery("#fgal-copy-code").stop(true, true).fadeIn().delay(2500).fadeOut();
 }
 
 jQuery(document).ready(function($) {

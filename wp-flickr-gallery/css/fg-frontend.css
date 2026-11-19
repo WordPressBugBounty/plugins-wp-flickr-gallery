@@ -125,3 +125,21 @@
 .awp-flickr-gallery-container .single-flickr-item:hover .awl-hm-plus {
     transform: translate(-50%, -50%) scale(1);
 }
+
+/* Responsive Grid Breakpoints */
+@media (max-width: 991px) and (min-width: 576px) {
+    .awp-flickr-gallery-container .single-flickr-item.col-md-3,
+    .awp-flickr-gallery-container .single-flickr-item.col-md-4 {
+        width: 50% !important;
+        float: left;
+    }
+}
+
+@media (max-width: 575px) {
+    .awp-flickr-gallery-container .single-flickr-item.col-md-3,
+    .awp-flickr-gallery-container .single-flickr-item.col-md-4 {
+        width: 100% !important;
+        float: none;
+    }
+}
+
