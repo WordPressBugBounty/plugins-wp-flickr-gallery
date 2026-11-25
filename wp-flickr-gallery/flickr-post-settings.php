@@ -149,10 +149,12 @@ if (!is_array($flickr_gallery_settings)) {
 					?>
 					<select name="thumb_img_size" class="awl-hm-select">
 						<option value="url_sq" <?php selected($thumb_img_size, 'url_sq'); ?>><?php esc_html_e('Square 75px', 'wp-flickr-gallery'); ?></option>
-						<option value="url_q" <?php selected($thumb_img_size, 'url_q'); ?>><?php esc_html_e('Large Square 150px', 'wp-flickr-gallery'); ?></option>
 						<option value="url_t" <?php selected($thumb_img_size, 'url_t'); ?>><?php esc_html_e('Thumbnail 100px', 'wp-flickr-gallery'); ?></option>
+						<option value="url_q" <?php selected($thumb_img_size, 'url_q'); ?>><?php esc_html_e('Large Square 150px', 'wp-flickr-gallery'); ?></option>
 						<option value="url_s" <?php selected($thumb_img_size, 'url_s'); ?>><?php esc_html_e('Small 240px', 'wp-flickr-gallery'); ?></option>
 						<option value="url_n" <?php selected($thumb_img_size, 'url_n'); ?>><?php esc_html_e('Small 320px', 'wp-flickr-gallery'); ?></option>
+						<option value="url_w" <?php selected($thumb_img_size, 'url_w'); ?>><?php esc_html_e('Small 400px', 'wp-flickr-gallery'); ?></option>
+						<option value="url_m" <?php selected($thumb_img_size, 'url_m'); ?>><?php esc_html_e('Medium 500px', 'wp-flickr-gallery'); ?></option>
 					</select>
 				</div>
 			</div>
@@ -255,7 +257,7 @@ if (!is_array($flickr_gallery_settings)) {
 				<div class="awl-hm-group">
 					<label class="awl-hm-label"><?php esc_html_e('Lightbox Quality', 'wp-flickr-gallery'); ?></label>
 					<?php 
-					$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_m';
+					$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_l';
 					if ('b' === $lightbox_img_size) {
 						$lightbox_img_size = 'url_l';
 					} elseif ($lightbox_img_size && strpos($lightbox_img_size, 'url_') !== 0) {
@@ -263,9 +265,10 @@ if (!is_array($flickr_gallery_settings)) {
 					}
 					?>
 					<select name="lightbox_img_size" class="awl-hm-select">
-						<option value="url_m" <?php selected($lightbox_img_size, 'url_m'); ?>><?php esc_html_e('Medium - 500px', 'wp-flickr-gallery'); ?></option>
-						<option value="url_l" <?php selected($lightbox_img_size, 'url_l'); ?>><?php esc_html_e('Large - 1024px', 'wp-flickr-gallery'); ?></option>
-						<option value="url_o" <?php selected($lightbox_img_size, 'url_o'); ?>><?php esc_html_e('Original - HD', 'wp-flickr-gallery'); ?></option>
+						<option value="url_c" <?php selected($lightbox_img_size, 'url_c'); ?>><?php esc_html_e('Medium - 800px', 'wp-flickr-gallery'); ?></option>
+						<option value="url_l" <?php selected($lightbox_img_size, 'url_l'); ?>><?php esc_html_e('Large - 1024px (Recommended)', 'wp-flickr-gallery'); ?></option>
+						<option value="url_h" <?php selected($lightbox_img_size, 'url_h'); ?>><?php esc_html_e('Large - 1600px (If Available)', 'wp-flickr-gallery'); ?></option>
+						<option value="url_o" <?php selected($lightbox_img_size, 'url_o'); ?>><?php esc_html_e('Original - Max Available', 'wp-flickr-gallery'); ?></option>
 					</select>
 				</div>
 			</div>

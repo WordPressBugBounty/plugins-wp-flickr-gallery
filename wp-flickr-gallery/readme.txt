@@ -4,7 +4,7 @@ Donate link: https://paypal.me/awplife
 Tags: flickr, flickr gallery, photo gallery, album gallery, flickr widget
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 1.6.1
+Stable tag: 1.6.2
 Requires PHP: 7.4
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -136,6 +136,12 @@ For questions or issues, please visit the [plugin support forum](https://wordpre
 
 == Changelog ==
 
+= 1.6.2 =
+* Fix: Implemented smart nearest-size URL resolver (`awl_fg_resolve_photo_url`) so thumbnails and lightbox images automatically step down to the nearest available Flickr size instead of breaking when a size (such as Original or Large) is omitted by Flickr.
+* Enhancement: Requested complete Flickr image size `extras` (`url_w`, `url_h`, `url_k`, and all standard sizes) in a single API call for both Albums and Photostreams.
+* Enhancement: Added `Small 400px (url_w)` and `Medium 500px (url_m)` to Thumbnail Size options, and streamlined Lightbox Quality options (`800px`, `1024px`, `1600px`, `Original - Max Available`) with `Large - 1024px` as the default.
+* Optimization: Versioned gallery transient cache keys (`awl_fg_album_v2_`, `awl_fg_photos_v2_`) and removed obsolete v1 cache cleanup.
+
 = 1.6.1 =
 * Performance: Drastically improved admin backend speed by eliminating over 400KB of redundant scripts, styles, and media modal assets from the gallery post editor.
 * Optimization: Implemented transient caching (1 hour) for album fetching and API responses with a manual "Sync Albums" button, stopping slow, blocking HTTP requests on edit screens.
@@ -206,5 +212,5 @@ For questions or issues, please visit the [plugin support forum](https://wordpre
 
 == Upgrade Notice ==
 
-= 1.6.1 =
-Recommended update: includes major admin performance improvements, instant cache invalidation on save, and PHP 8.2+ compatibility enhancements.
+= 1.6.2 =
+Recommended update: adds smart Flickr image size fallback to prevent broken thumbnails and lightbox links, plus expanded thumbnail and lightbox quality options.

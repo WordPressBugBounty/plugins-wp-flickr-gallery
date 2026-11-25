@@ -13,7 +13,7 @@ if (empty($flickr_album_id)) {
 	return;
 }
 
-$transient_key = 'awl_fg_album_' . $flickr_gallery_id;
+$transient_key = 'awl_fg_album_v2_' . $flickr_gallery_id;
 $res = get_transient($transient_key);
 
 if (false === $res) {
@@ -25,7 +25,7 @@ if (false === $res) {
 		'per_page' => 200,
 		'format' => 'json',
 		'nojsoncallback' => 1,
-		'extras' => 'date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_q, url_t, url_s, url_n, url_m, url_z, url_c, url_l, url_o',
+		'extras' => 'date_taken, owner_name, icon_server, original_format, last_update, geo, tags, machine_tags, o_dims, views, media, path_alias, url_sq, url_q, url_t, url_s, url_n, url_w, url_m, url_z, url_c, url_l, url_h, url_k, url_o',
 	);
 	$encoded_params = array();
 	foreach ($params as $k => $v) {
@@ -65,40 +65,8 @@ if (empty($res)) {
 	<?php
 	foreach ($res as $sp) {
 		$album_title_fetch = isset($sp['title']) ? $sp['title'] : '';
-		$thumbnail_url = '';
-		$lightboxl_url = '';
-
-		// Thumbnail Image Size Logic
-		if (!empty($thumb_img_size) && isset($sp[$thumb_img_size])) {
-			$thumbnail_url = $sp[$thumb_img_size];
-		}
-
-		// Fallbacks
-		if (empty($thumbnail_url)) {
-			$fallback_order = array('url_q', 'url_sq', 'url_s', 'url_t', 'url_n', 'url_m');
-			foreach ($fallback_order as $size) {
-				if (isset($sp[$size])) {
-					$thumbnail_url = $sp[$size];
-					break;
-				}
-			}
-		}
-
-		// Lightbox Image Size Logic
-		if (!empty($lightbox_img_size) && isset($sp[$lightbox_img_size])) {
-			$lightboxl_url = $sp[$lightbox_img_size];
-		}
-
-		// Lightbox Fallback
-		if (empty($lightboxl_url)) {
-			$fallback_order = array('url_l', 'url_o', 'url_m', 'url_z');
-			foreach ($fallback_order as $size) {
-				if (isset($sp[$size])) {
-					$lightboxl_url = $sp[$size];
-					break;
-				}
-			}
-		}
+		$thumbnail_url = awl_fg_resolve_photo_url($sp, $thumb_img_size);
+		$lightboxl_url = awl_fg_resolve_photo_url($sp, $lightbox_img_size);
 
 		if ($thumbnail_url) {
 			?>

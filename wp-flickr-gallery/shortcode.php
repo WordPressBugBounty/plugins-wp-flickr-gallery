@@ -3,6 +3,71 @@ if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
+if (!function_exists('awl_fg_resolve_photo_url')) {
+	/**
+	 * Resolve the best available Flickr photo URL for a preferred size.
+	 *
+	 * Steps down to the nearest smaller available size first (preventing broken
+	 * links on small uploads or restricted Original/1600px/2048px sizes), then
+	 * steps up if no smaller size exists.
+	 *
+	 * @param array  $photo          Flickr photo array from API response.
+	 * @param string $preferred_size Preferred size key (e.g. 'url_n', 'url_l').
+	 * @return string Resolved image URL, or empty string if none available.
+	 */
+	function awl_fg_resolve_photo_url($photo, $preferred_size)
+	{
+		if (!is_array($photo)) {
+			return '';
+		}
+
+		if (!empty($preferred_size) && !empty($photo[$preferred_size])) {
+			return $photo[$preferred_size];
+		}
+
+		// Ordered from largest to smallest Flickr size key.
+		$ladder = array(
+			'url_o',
+			'url_k',
+			'url_h',
+			'url_l',
+			'url_c',
+			'url_z',
+			'url_m',
+			'url_w',
+			'url_n',
+			'url_s',
+			'url_q',
+			'url_t',
+			'url_sq',
+		);
+
+		$idx = array_search($preferred_size, $ladder, true);
+		if (false === $idx) {
+			$idx = 0;
+		}
+
+		$count = count($ladder);
+		// Step down to nearest smaller available size first.
+		for ($i = $idx + 1; $i < $count; $i++) {
+			$key = $ladder[$i];
+			if (!empty($photo[$key])) {
+				return $photo[$key];
+			}
+		}
+
+		// If no smaller size exists, step up to nearest larger available size.
+		for ($i = $idx - 1; $i >= 0; $i--) {
+			$key = $ladder[$i];
+			if (!empty($photo[$key])) {
+				return $photo[$key];
+			}
+		}
+
+		return '';
+	}
+}
+
 /**
  * Flickr Gallery Shortcode
  */
@@ -67,7 +132,7 @@ function awl_flickr_gallery_shortcode($post_id)
 		$thumb_img_size = 'url_' . $thumb_img_size;
 	}
 
-	$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_m';
+	$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_l';
 	if ('b' === $lightbox_img_size) {
 		$lightbox_img_size = 'url_l';
 	} elseif ($lightbox_img_size && strpos($lightbox_img_size, 'url_') !== 0) {

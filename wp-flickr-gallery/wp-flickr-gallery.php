@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: Album Photostream Profile For Flickr
 Plugin URI: https://awplife.com/
 Description: A Newly Amazing Different Most Powerful Responsive Easy To Use Flickr Plugin For WordPress
-Version: 1.6.1
+Version: 1.6.2
 Author: A WP Life
 Author URI: https://awplife.com/
 Text Domain: wp-flickr-gallery
@@ -331,7 +331,7 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 					$thumb_img_size = 'url_' . $thumb_img_size;
 				}
 
-				$lightbox_img_size         = isset( $_POST['lightbox_img_size'] ) ? sanitize_text_field( wp_unslash( $_POST['lightbox_img_size'] ) ) : 'url_m';
+				$lightbox_img_size         = isset( $_POST['lightbox_img_size'] ) ? sanitize_text_field( wp_unslash( $_POST['lightbox_img_size'] ) ) : 'url_l';
 				if ( 'b' === $lightbox_img_size ) {
 					$lightbox_img_size = 'url_l';
 				} elseif ( $lightbox_img_size && strpos( $lightbox_img_size, 'url_' ) !== 0 ) {
@@ -357,8 +357,8 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 				update_post_meta( $post_id, $awl_fg_post_settings, $flickermeta_settings );
 
 				// Clear cached photo/album transients for this gallery so changes reflect immediately
-				delete_transient( 'awl_fg_photos_' . $post_id );
-				delete_transient( 'awl_fg_album_' . $post_id );
+				delete_transient( 'awl_fg_photos_v2_' . $post_id );
+				delete_transient( 'awl_fg_album_v2_' . $post_id );
 			}
 		}//end _fg_save_post_settings()
 
