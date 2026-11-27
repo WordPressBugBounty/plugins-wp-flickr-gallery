@@ -21,15 +21,18 @@ if (!function_exists('awl_fg_resolve_photo_url')) {
 			return '';
 		}
 
+		// Flickr's CDN (live.staticflickr.com) returns HTTP 429 to browsers for
+		// sizes above 1024px (_o, _k, _h). Cap to url_l (1024px) for reliable loading.
+		if (in_array($preferred_size, array('url_o', 'url_k', 'url_h'), true)) {
+			$preferred_size = 'url_l';
+		}
+
 		if (!empty($preferred_size) && !empty($photo[$preferred_size])) {
 			return $photo[$preferred_size];
 		}
 
-		// Ordered from largest to smallest Flickr size key.
+		// Ordered from largest browser-embeddable size to smallest Flickr size key.
 		$ladder = array(
-			'url_o',
-			'url_k',
-			'url_h',
 			'url_l',
 			'url_c',
 			'url_z',

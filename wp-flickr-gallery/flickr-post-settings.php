@@ -258,7 +258,7 @@ if (!is_array($flickr_gallery_settings)) {
 					<label class="awl-hm-label"><?php esc_html_e('Lightbox Quality', 'wp-flickr-gallery'); ?></label>
 					<?php 
 					$lightbox_img_size = isset($flickr_gallery_settings['lightbox_img_size']) ? $flickr_gallery_settings['lightbox_img_size'] : 'url_l';
-					if ('b' === $lightbox_img_size) {
+					if (in_array($lightbox_img_size, array('b', 'o', 'k', 'h', 'url_o', 'url_k', 'url_h'), true)) {
 						$lightbox_img_size = 'url_l';
 					} elseif ($lightbox_img_size && strpos($lightbox_img_size, 'url_') !== 0) {
 						$lightbox_img_size = 'url_' . $lightbox_img_size;
@@ -267,8 +267,6 @@ if (!is_array($flickr_gallery_settings)) {
 					<select name="lightbox_img_size" class="awl-hm-select">
 						<option value="url_c" <?php selected($lightbox_img_size, 'url_c'); ?>><?php esc_html_e('Medium - 800px', 'wp-flickr-gallery'); ?></option>
 						<option value="url_l" <?php selected($lightbox_img_size, 'url_l'); ?>><?php esc_html_e('Large - 1024px (Recommended)', 'wp-flickr-gallery'); ?></option>
-						<option value="url_h" <?php selected($lightbox_img_size, 'url_h'); ?>><?php esc_html_e('Large - 1600px (If Available)', 'wp-flickr-gallery'); ?></option>
-						<option value="url_o" <?php selected($lightbox_img_size, 'url_o'); ?>><?php esc_html_e('Original - Max Available', 'wp-flickr-gallery'); ?></option>
 					</select>
 				</div>
 			</div>

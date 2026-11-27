@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 Plugin Name: Album Photostream Profile For Flickr
 Plugin URI: https://awplife.com/
 Description: A Newly Amazing Different Most Powerful Responsive Easy To Use Flickr Plugin For WordPress
-Version: 1.6.2
+Version: 1.6.3
 Author: A WP Life
 Author URI: https://awplife.com/
 Text Domain: wp-flickr-gallery
@@ -332,7 +332,7 @@ if ( ! class_exists( 'Awl_Flickr_Gallery' ) ) {
 				}
 
 				$lightbox_img_size         = isset( $_POST['lightbox_img_size'] ) ? sanitize_text_field( wp_unslash( $_POST['lightbox_img_size'] ) ) : 'url_l';
-				if ( 'b' === $lightbox_img_size ) {
+				if ( in_array( $lightbox_img_size, array( 'b', 'o', 'k', 'h', 'url_o', 'url_k', 'url_h' ), true ) ) {
 					$lightbox_img_size = 'url_l';
 				} elseif ( $lightbox_img_size && strpos( $lightbox_img_size, 'url_' ) !== 0 ) {
 					$lightbox_img_size = 'url_' . $lightbox_img_size;

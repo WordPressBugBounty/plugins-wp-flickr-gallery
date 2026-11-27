@@ -4,7 +4,7 @@ Donate link: https://paypal.me/awplife
 Tags: flickr, flickr gallery, photo gallery, album gallery, flickr widget
 Requires at least: 5.0
 Tested up to: 7.1
-Stable tag: 1.6.2
+Stable tag: 1.6.3
 Requires PHP: 7.4
 License: GPLv2 or later 
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -136,6 +136,11 @@ For questions or issues, please visit the [plugin support forum](https://wordpre
 
 == Changelog ==
 
+= 1.6.3 =
+* Fix: Resolved Lightcase "Source could not be found..." errors caused by Flickr's CDN returning HTTP 429 in browsers for sizes above 1024px (`url_h`, `url_k`, `url_o`).
+* Fix: Updated `awl_fg_resolve_photo_url()` and post-save normalization to cap lightbox URLs at `url_l` (1024px) so existing and new galleries load reliably in the lightbox.
+* Enhancement: Streamlined Lightbox Quality options to browser-reliable sizes (`Medium - 800px` and `Large - 1024px (Recommended)`), with `Large - 1024px` as the default.
+
 = 1.6.2 =
 * Fix: Implemented smart nearest-size URL resolver (`awl_fg_resolve_photo_url`) so thumbnails and lightbox images automatically step down to the nearest available Flickr size instead of breaking when a size (such as Original or Large) is omitted by Flickr.
 * Enhancement: Requested complete Flickr image size `extras` (`url_w`, `url_h`, `url_k`, and all standard sizes) in a single API call for both Albums and Photostreams.
@@ -212,5 +217,5 @@ For questions or issues, please visit the [plugin support forum](https://wordpre
 
 == Upgrade Notice ==
 
-= 1.6.2 =
-Recommended update: adds smart Flickr image size fallback to prevent broken thumbnails and lightbox links, plus expanded thumbnail and lightbox quality options.
+= 1.6.3 =
+Recommended update: fixes Lightcase "Source could not be found..." errors caused by Flickr CDN HTTP 429 blocks on >1024px lightbox images.
